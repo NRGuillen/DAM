@@ -22,14 +22,14 @@ int main (){
 	
 	if(opciones == '1'){char letra;es_vocal(letra);
 	}else if(opciones == '2'){calcular_area_figura();
-	}else if(opciones == '3'){calcular_promedio();
+	}else if(opciones == '3'){calcular_promedio();}
 
 return 0;
 }
 void es_vocal(char letra){
 
 	printf("Introduce una vocal: ");
-	scanf(" %c", &letra); //tengo que dejar un espacio delante del %c, porque si no salta de linea y no se ejecuta el numero 1	
+	scanf(" %c", &letra); //tengo que dejar un espacio delante del %c, porque si no salta de linea y no se ejecuta el numero 1. Pongo un espacio antes del c porque el ultimo scanf habra dejado en el bugger de entrada un carater \n que si no pongo el espacio se guardaria en la variable letra	
 		
 	if(letra == 'a'){
 		printf("Es una vocal\n");
@@ -87,7 +87,7 @@ double calcular_promedio_dos_num(double num1, double num2){
 void calcular_promedio(){
 	
 	int numero;
-	double resultado, num1, num2;
+	double num1, num2;
 	
 	printf("De cuántos números quiere hacer el promedio? (2, 3 o 4): ");
 	scanf("%d", &numero);
@@ -95,20 +95,20 @@ void calcular_promedio(){
 	switch(numero){
 
 		case 2:
-		printf("Introduzca el primer número:\n");
+		printf("Introduzca el primer número: ");
 		scanf("%lf", &num1);
-		printf("Introduzca el segundo número:\n");
+		printf("Introduzca el segundo número: ");
 		scanf("%lf", &num2);
 		
-		resultado = calcular_promedio_dos_num(num1 + num2) / 2;
+		printf("El promedio de %lf, %lf es %lf\n", num1, num2, calcular_promedio_dos_num(num1, num2));
+		break;
 
-		printf("El promedio de %lf, %lf es: %lf", &num1, &num2, &calcular_promedio_dos_num);
-
+		default:
+		printf("Error\n");
 		break;
 	}
 		
 }
-
 
 
 
