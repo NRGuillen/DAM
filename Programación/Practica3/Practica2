@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+float suma(float a, float b){
+
+	return a + b;
+}
+float resta(float a, float b){
+
+	return a - b;
+}
+float division(float a, float b){
+
+	return a / b;
+}
+float multiplicacion(float a, float b){
+
+	return a * b;
+}
+int main (){
+
+float numero1, numero2;
+
+printf("Introduce el primer numero decimal o entero: ");
+scanf("%f", &numero1);
+
+printf("Introduce el segundo numero decimal o entero: ");
+scanf("%f", &numero2);
+
+float resultadoSuma = suma(numero1, numero2);
+float resultadoResta = resta(numero1, numero2);
+float resultadoMultiplicacion = multiplicacion(numero1, numero2);
+float resultadoDivision = division(numero1, numero2);
+
+printf("El resultado de la suma es: %f\n", resultadoSuma);
+
+printf("El resultado de la resta es: %f\n", resultadoResta);
+
+printf("El resultado de la multiplicacion es: %f\n", resultadoMultiplicacion);
+
+printf("El resultado de la division es: %f\n", resultadoDivision);
+
+	return 0;
+}
