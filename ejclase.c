@@ -93,7 +93,7 @@ void calcular_promedio(){
 	scanf("%d", &numero);
 
 	switch(numero){
-
+		
 		case 2:
 		printf("Introduzca el primer número: ");
 		scanf("%lf", &num1);
