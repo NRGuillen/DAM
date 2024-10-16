@@ -1,3 +1,4 @@
+Hello! How can I assist you today?
 #include <stdio.h>
 #include <stdlib.h>	
 void es_vocal(char letra); 
@@ -120,7 +121,7 @@ void calcular_promedio(){
 
 
 
-
+//
 
 
 
