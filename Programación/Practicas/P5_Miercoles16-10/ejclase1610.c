@@ -74,7 +74,7 @@ int main (){
 
 		int maximo = encontrar_maximo(num1, num2);
 		
-		printf("El número maximo entre %d y %d es:%d\n", num1, num2, maximo);
+		printf("El número maximo entre %d y %d es:%d\n", num2, num1, maximo);
 
 	break;
         }
@@ -107,7 +107,7 @@ int main (){
 
 		intercambiar_numeros;
 
-		printf("Después de intercambiar, el primer número es el %.2f, el segundo número es el %.2f\n", num1, num2);
+		printf("Después de intercambiar, el primer número es el %.2f, el segundo número es el %.2f\n", num2, num1);
 	break;
        }
 
