@@ -3,12 +3,16 @@
 
 int main(){
 	
-	int i = 0;	
-	
-	for(i = 0; i<11; i = i +1){
+	for(int i = 1; i<=10; i++){
 		
-	printf("%d\n", i);
+	//tambien se podiria hacer con i<11
+
+	printf("%d ", i);
 	}
 	
+	// el espacio despues de la "d " es para que se escriba con espacios	
+	
+	printf("Cadena terminada\n");
+
 	return 0;
 }
