@@ -27,3 +27,44 @@ int main(){
 
 	return 0;
 }
+
+// EJERCICIO RESUELTO POR PROFEROR
+//
+// int main(){
+//	
+//	char str1[8] = "iguales"; 
+//	char str2[8] = "iguales";
+//	char str3[8];
+//	
+//	//son distintas porque las memorias en tienen almacenado las palabras
+//	 en distintas posiciones de las memorias y al compararla no estan en el mismo sitio por ejemplo
+//  	i g u a l e s
+//          	i g u a l e s
+//
+//	if(str1 == str2){
+//		printf("Son iguales");
+//	}else
+//		pintf("Son distintas");
+//	}
+//	
+//	//str1 es mayo porque str1 se guarda en la memoria antes que str2 esto no suele occurrir
+//	siempre pero es lo normal
+//
+//	if (str1 < str2){
+//		printf("str1 es menor\n");
+//	}else{
+//		printf("str2 es menor\n");
+//	}
+//
+//	for (int i = 0; i<8; i++){
+//		if(str1[i] == str2[i]){
+//			printf("%c", str1[i]);
+//		}
+//	}
+//
+//	str3 = str1
+//	str1[0] = 'I'
+//	printf("c", str3[0]);
+//
+// return 0;
+// }
