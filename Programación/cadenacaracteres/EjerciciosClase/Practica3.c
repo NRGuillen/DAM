@@ -62,9 +62,12 @@ int main(){
 //		}
 //	}
 //
-//	str3 = str1
-//	str1[0] = 'I'
+//	ESTA ASIGNACION NO ESTA PERMITIDA
+//
+//	str3 = str1;
+//	str1[0] = 'I';
 //	printf("c", str3[0]);
+//	
 //
 // return 0;
 // }
