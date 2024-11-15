@@ -5,7 +5,7 @@
 
 	void intercambio(int num1, int num2, int num3){
 
-
+		int aux = *n1
 		num1 = num3;
 		num2 = num1;
 		num1 = num2;
