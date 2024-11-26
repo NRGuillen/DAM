@@ -54,6 +54,16 @@ void inicializar(Estudiante * estudiante_a_rellenar, char * nombre, int edad, fl
 	//estudiante_a_rellenar.nombre = nombre; es incorrecto porque compara las memorias no el contenido de las memorias.
 	strcpy(estudiante_a_rellenar->nombre, nombre);
 }
+//tiene que recibir un puntero a estudiante porque va a modificar la variable que recibe como argumento
+//No es necesario un valor de retorno cumpleañero porque va a ser modificado en la funcion 
+void cumpleanios(Estudiante * cumpleanero){
+	cumpleanero->edad++;
+
+//crea una funcion que cree una cadena de texto con la informacion del estudiante.
+//(Puedes empezar creando una funcion que imprima por pantalla la informacion de un estudiante).
+	
+}	
+
 int main(){
 	
 	Estudiante listado[MAX_ESTUDIANTES]; // Aqui se reserva la memoria para los estudiantes.. Los 560 bytes se resevan aqui.
@@ -79,8 +89,18 @@ int main(){
 	scanf("%s", nombre);
 
 	//inicializar(listado + i,nombre, edad, nota);
-	inicializar(&listado[i],nombre, edad, nota);
+	inicializar(&listado[1],nombre, edad, nota);
 	}
+	//El estudiante de la primera posicion ha cumplido años
+	printf("Edad antigua %s: %d\n" ,listado[0].nombre,listado[0].edad);
+	
+	cumpleanios(&listado[0]/*Direccion de memoria*/);
+	//cumpleanios(listado);
+	
+	printf("Edad nueva: %d\n",listado[0].edad);
+	//tambien se pueden usar
+	//printf("Edad nueva: %d\n",listado ->edad);
+	//printf("Edad nueva: %d\n",(*listado).edad);
 	return 0;
 
 }
