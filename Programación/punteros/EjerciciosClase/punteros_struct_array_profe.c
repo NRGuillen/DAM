@@ -4,7 +4,7 @@
 //Definimos las constantes
 #define MAX_NOMBRE 20
 #define MAX_ESTUDIANTES 20
-
+#define MAX_BUFFER 200
 typedef struct{
 	char nombre[MAX_NOMBRE];
 	int edad;
@@ -58,15 +58,46 @@ void inicializar(Estudiante * estudiante_a_rellenar, char * nombre, int edad, fl
 //No es necesario un valor de retorno cumpleañero porque va a ser modificado en la funcion 
 void cumpleanios(Estudiante * cumpleanero){
 	cumpleanero->edad++;
+}
 
 //crea una funcion que cree una cadena de texto con la informacion del estudiante.
 //(Puedes empezar creando una funcion que imprima por pantalla la informacion de un estudiante).
 	
+//27/11 VAMOS A CREAR UNA FUNCION PARA IMPRIMIR UN ESTUDIANTE. LO VAMOS A HACER DE 2 FORMAS
+
+//Recibe un estudiante y muestra por pantalla todos sus datos
+void imprimirEstudiante( const Estudiante* estudiante_a_imprimir){
+printf("Nombre: %s\n",estudiante_a_imprimir -> nombre);
+printf("Edad:%d\n", estudiante_a_imprimir ->edad);
+printf("Nota: %f\n", estudiante_a_imprimir -> nota);
 }	
 
+//UNA FUNCIO DE "IMPRIMIR" SIN LOS PRINTFS
+//Convertir un estudiante a una cadena de texto
+//Quiero que sea una variable local del main que aqui se utiliza y aqui se rellena
+//Esta funcion da un warning porque la variable retval deja de exisitir cuando acaba la funcion
+/*char estudianteToString_warning(const Estudiante * datos){
+	char retval[MAX_BUFFER];
+
+//snprintf (donde, cuanto, el qué[lo que harias con un printf])
+	snprintf(retval,MAX_BUFFER,"El estudiante %s de %d ha sacado un %f.", datos->nombre, datos->edad, datos->nota);
+
+	return retval;
+}
+*/
+char estudianteToString_warning(const Estudiante * datos, char * retval){
+//snprintf (donde, cuanto, el qué[lo que harias con un printf])
+	snprintf(retval,MAX_BUFFER * sizeof(char)/*200 x 4 (Lo que ocupa un char)*/,"El estudiante %s de %d ha sacado un %f.", datos->nombre, datos->edad, datos->nota);
+
+}
+
+void modificarNombreEstudiante(Estudiante* estudiante_a_modificar, char * nuevo_nombre){
+
+strcpy(estudiante_a_modificar -> nombre, nuevo_nombre);
+}
 int main(){
 	
-	Estudiante listado[MAX_ESTUDIANTES]; // Aqui se reserva la memoria para los estudiantes.. Los 560 bytes se resevan aqui.
+	Estudiante listado[MAX_ESTUDIANTES]; // Aqui se reserva la memoria para los estudiantes.. Los 560 bytes se resevan aqui. 
 	int num_estudiantes;
 	
 	float nota;
@@ -101,6 +132,22 @@ int main(){
 	//tambien se pueden usar
 	//printf("Edad nueva: %d\n",listado ->edad);
 	//printf("Edad nueva: %d\n",(*listado).edad);
+
+	imprimirEstudiante(&listado[0]);
+
+	char StringARellenar[MAX_BUFFER];
+	estudianteToString_warning(&listado[0],StringARellenar);
+	printf("%s\n", StringARellenar);
+	//El estudiante ... de ... años ...
+	
+	//Renombrar
+
+	char nuevo_nombre[MAX_NOMBRE];
+	printf("Introduce nombre: ");
+	scanf("%s", nuevo_nombre);
+	modificarNombreEstudiante(&listado[0], nuevo_nombre);
+	imprimirEstudiante(&listado[0]);
+
 	return 0;
 
 }
