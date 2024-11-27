@@ -68,8 +68,8 @@ void cumpleanios(Estudiante * cumpleanero){
 //Recibe un estudiante y muestra por pantalla todos sus datos
 void imprimirEstudiante( const Estudiante* estudiante_a_imprimir){
 printf("Nombre: %s\n",estudiante_a_imprimir -> nombre);
-printf("Edad:%d\n", estudiante_a_imprimir ->edad);
-printf("Nota: %f\n", estudiante_a_imprimir -> nota);
+printf("\tEdad:%d\n", estudiante_a_imprimir ->edad);
+printf("\tNota: %f\n", estudiante_a_imprimir -> nota);
 }	
 
 //UNA FUNCIO DE "IMPRIMIR" SIN LOS PRINTFS
@@ -85,7 +85,7 @@ printf("Nota: %f\n", estudiante_a_imprimir -> nota);
 	return retval;
 }
 */
-char estudianteToString_warning(const Estudiante * datos, char * retval){
+void estudianteToString(const Estudiante * datos, char * retval){
 //snprintf (donde, cuanto, el qué[lo que harias con un printf])
 	snprintf(retval,MAX_BUFFER * sizeof(char)/*200 x 4 (Lo que ocupa un char)*/,"El estudiante %s de %d ha sacado un %f.", datos->nombre, datos->edad, datos->nota);
 
@@ -111,16 +111,16 @@ int main(){
 	printf("Cuantos estudiantes desea inicializar? ");
 	scanf("%d", &num_estudiantes);
 
-	for(int i = 0; i < num_estudiantes, i++;){
+	for(int i = 0; i < num_estudiantes; i++){
 	printf("Introduce la edad: ");
-	scanf("%d", &edad);
+	scanf(" %d", &edad);
 	printf("Introduce la nota: ");
-	scanf("%f", &nota);
+	scanf(" %f", &nota);
 	printf("Introduce el nombre: ");
 	scanf("%s", nombre);
 
 	//inicializar(listado + i,nombre, edad, nota);
-	inicializar(&listado[1],nombre, edad, nota);
+	inicializar(listado,nombre, edad, nota);
 	}
 	//El estudiante de la primera posicion ha cumplido años
 	printf("Edad antigua %s: %d\n" ,listado[0].nombre,listado[0].edad);
@@ -136,7 +136,7 @@ int main(){
 	imprimirEstudiante(&listado[0]);
 
 	char StringARellenar[MAX_BUFFER];
-	estudianteToString_warning(&listado[0],StringARellenar);
+	estudianteToString(&listado[0],StringARellenar);
 	printf("%s\n", StringARellenar);
 	//El estudiante ... de ... años ...
 	
