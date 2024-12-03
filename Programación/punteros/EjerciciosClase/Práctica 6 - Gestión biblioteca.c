@@ -1,68 +1,70 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define MAX_TITULO 80
 #define MAX_AUTOR 50
 #define MAX_LIBROS 40
 
-typedef enum{
-	FICTION, 	// 0
-	NON_FICTION, // 1
-	POETRY, 	// 2
-	THEATER, 	// 3
-	ESSAY,	// 4
-} Categoria; 
+typedef enum {
+    FICTION,
+    NON_FICTION,
+    POETRY,
+    THEATER,
+    ESSAY,
+} Categoria;
 
-typedef struct{
-	
-	int ID; //Numero del libro
-	char titulo[MAX_TITULO]; // Nombre del libro
-    char autor[MAX_AUTOR]; // libro del autor
-	float precio; // precio del libro
-    char categoria; //categoria del libro
-    int cantidad; //cantidad de libros
-      
+typedef struct {
+    int ID;
+    char titulo[MAX_TITULO];
+    char autor[MAX_AUTOR];
+    float precio;
+    Categoria categoria;
+    int cantidad;
 } Libro;
 
-void mostrarLibro(Libro biblioteca[], int id) {
-    for (int i = 0; i < MAX_LIBROS; i++) {
-        if (biblioteca[i].ID == id) {
-            printf("ID: %d\n", biblioteca[i].ID);
-            printf("Titulo: %s\n", biblioteca[i].titulo);
-            printf("Autor: %s\n", biblioteca[i].autor);
-            printf("Precio: %.2f\n", biblioteca[i].precio);
-            printf("Categoria: %d\n", biblioteca[i].categoria); 
-            printf("Cantidad disponible: %d\n", biblioteca[i].cantidad);
+/*Creo este void debido a que si no estaria repitiendo muchas veces los printf en distintos
+codigos es decir, con este void puedo hacer printf en void mostrarLibro y en void mostrarCantidadLibros
+
+*/
+
+void imprimirSoloUnLibro(Libro *biblioteca){
+
+            printf("ID: %d\n", (*biblioteca).ID);
+            printf("Titulo: %s\n", (*biblioteca).titulo);
+            printf("Autor: %s\n", (*biblioteca).autor);
+            printf("Precio: %.2f\n", (*biblioteca).precio);
+            printf("Categoria: %d\n", (*biblioteca).categoria);
+            printf("Cantidad disponible: %d\n", (*biblioteca).cantidad);
+}
+
+// Muestra un libro por ID
+void mostrarLibro(Libro *biblioteca, int totalLibros, int id) {
+    for (int i = 0; i < totalLibros; i++) {
+        if ((biblioteca + i)->ID == id) {
+                imprimirSoloUnLibro(biblioteca);
+            return;
         }
     }
     printf("No se encontró el libro con ID: %d\n", id);
 }
 
-void añadirLibros(Libro* libro_a_añadir, int* añadirLibros, int* buscarLibros, int* mostrarCantidad, char* mostrarInformacion){
-
+// Muestra una cantidad específica de libros
+void mostrarCantidadLibros(Libro *biblioteca, int totalLibros, int cantidad) {
+    if (cantidad > totalLibros || cantidad <= 0) {
+        printf("Cantidad no válida. Solo hay %d libros disponibles.\n", totalLibros);
+        return;
+    }
+            imprimirSoloUnLibro(biblioteca);
 }
 
-int main(){
+int main() {
+    int id, cantidadLibros;
+    char respuesta[3];
+    int totalLibros = 50;
 
-		int añadirLibros;
-        int id;
-		int buscarLibros;
-        int cantidadLibros;
-		int mostrarCantidad;
-		char mostrarInformacion[100];
-        char idlibros[3];
-
-        //declaro el strcut libro en el main, donde 
-        // el '1' seria igual a la ID
-        //el 'To Kill a Mockingbird' seria igual al titulo con un maximo de 80 caracteres
-        //el 'Harper Lee' seria igual al nombre del autor
-        //el '15,99' seria igual al precio del libro
-        //el '10' seria igual a la cantidad del libro
-
-  	 	Libro biblioteca[MAX_LIBROS] = {
-
-  		{1,  "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10},
+    // Declaración de la biblioteca
+    Libro biblioteca[MAX_LIBROS] = {
+        {1,  "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10},
         {2,  "1984", "George Orwell", 12.49, FICTION, 5},
         {3,  "The Great Gatsby", "F. Scott Fitzgerald", 10.99, FICTION, 8},
         {4,  "Moby Dick", "Herman Melville", 18.99, FICTION, 12},
@@ -102,23 +104,21 @@ int main(){
         {38, "The Communist Manifesto", "Karl Marx and Friedrich Engels", 5.99, ESSAY, 12},
         {39, "The Republic", "Plato", 16.00, ESSAY, 6},
         {40, "Thus Spoke Zarathustra", "Friedrich Nietzsche", 14.99, ESSAY, 10}
-   }; 
+    };
 
-        printf("¿Quieres visualizar un solo libro? ");
-        scanf(" %s\n", idlibros);
+    printf("¿Quieres visualizar un solo libro? (responde con si o no): ");
+    scanf("%s", respuesta);
 
-        if(strcmp(idlibros, "si") == 0 || strcmp(idlibros, "Si") == 0) {
-            printf("Introduce el ID del libro: ");
-            scanf (" %d", &id);
-            printf("El libro con la id %d tiene: ", id);
-            mostrarLibro;
-        }else if(strcmp(idlibros, "no") == 0 || strcmp(idlibros, "No") == 0) {
-            printf("Introduce la que cantidad de libros quieres visualizar: ");
-            scanf(" %d", &cantidadLibros);
-            return 0;
-        }else{
-            printf("Introduce una respuesta valida, si o no");
-        }
+    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
+        printf("Introduce el ID del libro: ");
+        scanf("%d", &id);
+        mostrarLibro(biblioteca, totalLibros, id);
+    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
+        printf("Saliendo del programa.\n");
+        
+    } else {
+        printf("Has introducido un dato erroneo.\n");
+    }
 
-	return 0;
+    return 0;
 }
