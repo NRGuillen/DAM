@@ -22,7 +22,6 @@ typedef struct {
     int cantidad;
 } Libro;
 
-
 /*
 Creo este void debido a que si no estaria repitiendo muchas veces los printf en distintos
 codigos es decir, con este void puedo hacer printf en void mostrarLibro y en void mostrarCantidadLibros
@@ -202,94 +201,13 @@ void mostrarLibrosPorCategoria(Libro *biblioteca, int totalLibros, Categoria cat
     }
 }
 
-//<-----------------------------------------------------------------------------MENU-------------------------------------------------------------------------------------->
-
-void visualizarLibros(char respuesta[3], Libro *biblioteca, int totalLibros) {
-    printf("¿Quieres visualizar todos los libros? (responde con si o no): ");
-    scanf("%s", respuesta);
-
-    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
-        mostrarTodosLosLibros(biblioteca, totalLibros);  // Llamada corregida a la función
-    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
-        // No hacer nada si la respuesta es "no"
-    } else {
-        printf("Has introducido un dato erroneo.\n");
-    }
-}
-
-void visualizarCaracteristicas(char respuesta[3], Libro *biblioteca, int totalLibros, int id) {
-    printf("¿Quieres visualizar las características de algun libro? (responde con si o no): ");
-    scanf("%s", respuesta);
-
-    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
-        printf("Introduce el ID del libro: ");
-        scanf("%d", &id);
-        if(id >= 41){
-            printf("\tNo existe ningun libro con esa id\n");
-        }
-        mostrarLibro(biblioteca, totalLibros, id);
-    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
-       
-    } else {
-        printf("Has introducido un dato erroneo.\n");
-    }
-}
-
-void visualizarCantidad(char respuesta[3], Libro *biblioteca, int totalLibros, int id){
-    printf("¿Quieres visualizar la cantidad de un libro? (responde con si o no): ");
-    scanf("%s", respuesta);
-
-    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
-        printf("Introduce el ID del libro: ");
-        scanf("%d", &id);
-        mostrarCantidadLibros(biblioteca, totalLibros, id);  
-    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
-    
-    } else {
-        printf("Has introducido un dato erróneo.\n");
-    }
-}
-
-void modificarCantidad(char respuesta[3], Libro *biblioteca, int totalLibros, int id){
-   printf("¿Quieres modificar el stock de un libro? (responde con si o no): ");
-    scanf("%s", respuesta);
-
-    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
-        printf("Introduce el ID del libro: ");
-        scanf("%d", &id);
-        mostrarCantidadLibros(biblioteca,  totalLibros,  id); 
-        añadirCantidadLibro (biblioteca, totalLibros, id); 
-
-    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
-    
-    } else {
-        printf("Has introducido un dato erróneo.\n");
-    } 
-}
-
-void visualizarCategoria(char respuesta[3], Libro *biblioteca, int totalLibros, int id){
-    int categoriaSeleccionada;  
-
-    printf("Introduce qué libros de la misma categoría quieres visualizar (0 = FICTION, 1 = POETRY, 2 = NON_FICTION, 3 = THEATER, 4 = ESSAY): ");
-    scanf("%d", &categoriaSeleccionada);
-
-    // Verificamos si la categoría es válida
-    if (categoriaSeleccionada >= 0 && categoriaSeleccionada <= 4) {
-        printf("Seleccionaste la categoria: %d\n", categoriaSeleccionada);  
-        mostrarLibrosPorCategoria(biblioteca, totalLibros, (Categoria)categoriaSeleccionada);  
-    } else {
-        printf("\tCategoría no válida, por favor elige un valor entre 0 y 4.\n");
-    }
-}
-
-
-
-
-
-
-
 int main() {
-    
+    int id, cantidadLibros;
+    Categoria categoria; //Declaro categoria para el "mostrarLibrosPorCategoria"
+    char respuesta[3]; // limito la respuesta a tres caracteres, si\0, no\0
+    int totalLibros = 40;//limito los libros a 40 ya que solo hay 40
+    int cantidad;
+
     // Declaración de la biblioteca
     Libro biblioteca[MAX_LIBROS] = {
         {1,  "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10},
@@ -334,53 +252,98 @@ int main() {
         {40, "Thus Spoke Zarathustra", "Friedrich Nietzsche", 14.99, ESSAY, 10}
     };
 
-    int opcion;
-    char respuesta[3];
-    int id, cantidadLibros;
-    Categoria categoria; //Declaro categoria para el "mostrarLibrosPorCategoria"
-    int totalLibros = 40;//limito los libros a 40 ya que solo hay 40
-    int cantidad;
-
-    printf("Seleccione una opcion:\n");
-    printf("\t1. Visualizar todos los libros:\n");
-    printf("\t2. Visualizar caracteristicas de un libro:\n");
-    printf("\t3. Visualizar la cantidad(stock) de un libro:\n");
-    printf("\t4. Modificar la cantidad(stock) de un libro:\n");
-    printf("\t5. Visualizar una categoria:\n");
-    printf("\t6. Salir del programa:\n");
-    printf("\tOpcion: ");
-    scanf("%d", &opcion);
+    /*---------------EXPLICACION GLOBAR DE ESTOS IF------------------
+    #if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0)
+    #Comprueba que el usuario haya puesto un si, o Si, de lo contrario el codigo no se ejecutara ya que seria = 1.
 
 
-    switch(opcion){
-        case 1:
-              visualizarLibros(respuesta, biblioteca, totalLibros);
-              break;
-    
-        case 2:
-              visualizarCaracteristicas(respuesta, biblioteca, totalLibros, id);
-              break;
-        
-        case 3:
-              visualizarCantidad(respuesta, biblioteca, totalLibros, id);
-              break;
-        
-        case 4:
-              modificarCantidad(respuesta, biblioteca, totalLibros, id);
-              break;
-        
-        case 5:
-              visualizarCategoria(respuesta, biblioteca, totalLibros, id);
-              break;
-        
-       case 6:
-              printf("\tSaliendo...\n");
-              break;
+    #if(id >= 41){
+    #        printf("\tNo existe ningun libro con esa id\n");
+    #    }
+    #Si el id que introduce el usuario es mayor a 41( debido a que solo hay 40 libros) ejecuta el printf de error
 
-        default:
-              printf("Has introducido un numero incorrecto\n");
+    #else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0)
+    #Comprueba que el usuario haya puesto un no, o No, de lo contrario el codigo no se ejecutara ya que seria = 1.
+
+    */
+
+    /*---------------VISUALIZAR TODOS LOS LIBROS------------------*/
+
+    printf("¿Quieres visualizar todos los libros? (responde con si o no): ");
+    scanf("%s", respuesta);
+
+    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
+        mostrarTodosLosLibros(biblioteca, totalLibros);
+    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
+
+    } else {
+        printf("Has introducido un dato erroneo.\n");
     }
+
+
+    /*---------------VISUALIZAR CARACTERISTICAS DE UN LIBRO------------------*/
+
+
+    printf("¿Quieres visualizar las características de algun libro? (responde con si o no): ");
+    scanf("%s", respuesta);
+
+    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
+        printf("Introduce el ID del libro: ");
+        scanf("%d", &id);
+        if(id >= 41){
+            printf("\tNo existe ningun libro con esa id\n");
+        }
+        mostrarLibro(biblioteca, totalLibros, id);
+    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
+       
+    } else {
+        printf("Has introducido un dato erroneo.\n");
+    }
+
+    /*---------------VISUALIZAR CANTIDAD DE UN LIBRO------------------*/
+
+    printf("¿Quieres visualizar la cantidad de un libro? (responde con si o no): ");
+    scanf("%s", respuesta);
+
+    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
+        printf("Introduce el ID del libro: ");
+        scanf("%d", &id);
+        mostrarCantidadLibros(biblioteca, totalLibros, id);  
+    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
     
+    } else {
+        printf("Has introducido un dato erróneo.\n");
+    }
+
+    /*---------------MODIFICACION DEL STOCK DE UN LIBRO------------------*/
+
+    printf("¿Quieres modificar el stock de un libro? (responde con si o no): ");
+    scanf("%s", respuesta);
+
+    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
+        printf("Introduce el ID del libro: ");
+        scanf("%d", &id);
+        mostrarCantidadLibros(biblioteca,  totalLibros,  id); //Llamo el void mostrarCantidadLibros para visualizar la cantidad que tiene un libro.
+        añadirCantidadLibro (biblioteca, totalLibros, id); //Llamo el void añadirCantidadLibro para incrementar el stock.
+
+    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
+    
+    } else {
+        printf("Has introducido un dato erróneo.\n");
+    }
+
+    /*-------------------------VISUALIZAR CATEGORIA-------------------------*/
+
+    printf("Introduce qué libros de la misma categoría quieres visualizar (0 = FICTION, 1 = POETRY, 2 = NON_FICTION, 3 = THEATER, 4 = ESSAY): ");
+    scanf("%d", &categoria);  // Capturamos la categoría como un valor entero
+
+    // Verificamos si la categoría es válida
+    if (categoria >= 0 && categoria <= 4) {
+        printf("Seleccionaste la categoria: %d\n", categoria);  // Imprimir categoría seleccionada
+        mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);  // Pasamos la categoría seleccionada
+    } else {
+        printf("\tCategoría no válida, por favor elige un valor entre 0 y 4.\n");
+    }
 
     return 0;
 }
