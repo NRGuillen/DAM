@@ -6,6 +6,7 @@ int main() {
     //aqui hay un casting implicito
     //malloc devuelve un void* hay que convertirlo para poder utilizarlo
 
+    //CASTING EXPLÍCITO
     int p* = (int*)malloc(sizeof(int));
     //Esta es la buena práctica
 
@@ -18,4 +19,3 @@ int main() {
     printf("El valor es %d\n", *p);
     free(p); //Liberamos la memoria reservada
     free(p_error);//Liberamos 
-}
