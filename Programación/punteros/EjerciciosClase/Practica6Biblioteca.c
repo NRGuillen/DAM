@@ -102,7 +102,6 @@ void mostrarLibro(Libro *biblioteca, int totalLibros, int id) { /*
                                         (biblioteca + i)->ID accede  al campo deseado del libro en la posición i
                                         (biblioteca + i)->ID == id Compara el id introducido del usuario con el id de biblioteca, (1 = 1) = {1,  "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10}
                                         */
-
             imprimirSoloUnLibro(biblioteca + i);
         }
                                                 /*
@@ -163,7 +162,7 @@ void añadirCantidadLibro (Libro *biblioteca, int totalLibros, int id) {
                                                                         Declaro id para acceder a la id del libro y poder modificar la cantidad.
                                                                         */
     if (id < 1 || id > totalLibros) { //Comprueba que el id este en el rango de 0 y 40 
-        printf("El ID ingresado no es válido. Debe estar entre 1 y el 40");
+        printf("El ID ingresado no es válido. Debe estar entre 1 y el 40\n");
     }
     for (int i = 0; i < totalLibros; i++) { //Bucle para recorrer el array desde el 0 al 40.
         if ((biblioteca + i)->ID == id) { //Este if compara la ID de la lista, con el id introducido del usuario
@@ -282,13 +281,7 @@ void visualizarCategoria(char respuesta[3], Libro *biblioteca, int totalLibros, 
     }
 }
 
-
-
-
-
-
-
-int main() {
+int main(int argc, char ** argv) {
     
     // Declaración de la biblioteca
     Libro biblioteca[MAX_LIBROS] = {
@@ -341,6 +334,54 @@ int main() {
     int totalLibros = 40;//limito los libros a 40 ya que solo hay 40
     int cantidad;
 
+    printf("Lista de arguemtos (hay %d argumentos):\n",argc);
+    for(int i = 0; i<argc; i++){
+        printf("\t Argumento %d: %s\n",i,argv[i]);
+    }
+
+    if (argc == 1){
+        if (strcmp(argv[1],"biblioteca") == 0){
+            mostrarTodosLosLibros( biblioteca, totalLibros);
+        }    } else if(argc == 2){
+        if (strcmp(argv[1],"mostrar") == 0){
+            mostrarTodosLosLibros( biblioteca, totalLibros);
+        }else if (strcmp(argv[1],"añadir") == 0){
+            añadirCantidadLibro ( biblioteca,  totalLibros,  id);
+        }
+
+    if (argc == 2){
+        if (strcmp(argv[1],"mostrar1") == 0){
+            mostrarTodosLosLibros( biblioteca, totalLibros);
+        }    } else if(argc == 2){
+        if (strcmp(argv[1],"categoria") == 0){
+            mostrarTodosLosLibros( biblioteca, totalLibros);
+        }else if (strcmp(argv[1],"autor") == 0){
+            printf("LLama a la funcion del autor");
+        }
+    }
+
+
+    } else if(argc == 3){
+        if (strcmp(argv[1],"mostrarid") == 0){
+            int id = (atoi (argv[2]));
+            mostrarLibro(biblioteca, MAX_LIBROS, id);
+        }else if (strcmp(argv[1],"categoria") == 0){
+            visualizarCategoria( respuesta, biblioteca, totalLibros, id);
+        }else if (strcmp(argv[1],"autor") == 0){
+            printf("LLama a la funcion del autor");
+        }
+   
+    } else if (argc == 4){
+        if (strcmp(argv[1],"stockid") == 0){
+            mostrarTodosLosLibros( biblioteca, totalLibros);
+        }else if (strcmp(argv[1],"quantId") == 0){
+            añadirCantidadLibro ( biblioteca,  totalLibros,  id);
+        }
+        
+    }
+
+    /*
+
     printf("Seleccione una opcion:\n");
     printf("\t1. Visualizar todos los libros:\n");
     printf("\t2. Visualizar caracteristicas de un libro:\n");
@@ -381,6 +422,7 @@ int main() {
               printf("Has introducido un numero incorrecto\n");
     }
     
+    */
 
     return 0;
 }

@@ -201,12 +201,15 @@ void mostrarLibrosPorCategoria(Libro *biblioteca, int totalLibros, Categoria cat
     }
 }
 
-int main() {
+int main(int argc, char ** argv) {
+
     int id, cantidadLibros;
     Categoria categoria; //Declaro categoria para el "mostrarLibrosPorCategoria"
     char respuesta[3]; // limito la respuesta a tres caracteres, si\0, no\0
     int totalLibros = 40;//limito los libros a 40 ya que solo hay 40
     int cantidad;
+
+
 
     // Declaración de la biblioteca
     Libro biblioteca[MAX_LIBROS] = {
@@ -267,6 +270,34 @@ int main() {
 
     */
 
+    printf("Lista de arguemtos (hay %d argumentos):\n",argc);
+    for(int i = 0; i<argc; i++){
+        printf("\t Argumento %d: %s\n",i,argv[i]);
+    }
+
+    if (argc == 1){
+        // Caso inicial.
+    } else if(argc == 2){
+        if (strcmp(argv[1],"mostrar") == 0){
+            mostrarTodosLosLibros(Libro *biblioteca, totalLibros);
+        }else if (strcmp(argv[1],"añadir") == 0){
+            añadirCantidadLibro (Libro *biblioteca,  totalLibros,  id);
+        }
+    } else if(argc == 3){
+        /*if (strcmp(argv[1],"mostrar") == 0){
+            mostrarTodosLosLibros(Libro *biblioteca, totalLibros);
+        }else if (strcmp(argv[1],"añadir") == 0){
+            añadirCantidadLibro (Libro *biblioteca,  totalLibros,  id);
+        }
+        */
+    } else if (argc == 4){
+         /*if (strcmp(argv[1],"mostrar") == 0){
+            mostrarTodosLosLibros(Libro *biblioteca, totalLibros);
+        }else if (strcmp(argv[1],"añadir") == 0){
+            añadirCantidadLibro (Libro *biblioteca,  totalLibros,  id);
+        }
+        */
+    }
     /*---------------VISUALIZAR TODOS LOS LIBROS------------------*/
 
     printf("¿Quieres visualizar todos los libros? (responde con si o no): ");
