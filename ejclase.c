@@ -1,4 +1,3 @@
-Hello! How can I assist you today?
 #include <stdio.h>
 #include <stdlib.h>	
 void es_vocal(char letra); 
@@ -30,7 +29,7 @@ return 0;
 void es_vocal(char letra){
 
 	printf("Introduce una vocal: ");
-	scanf(" %c", &letra); //tengo que dejar un espacio delante del %c, porque si no salta de linea y no se ejecuta el numero 1. Pongo un espacio antes del c porque el ultimo scanf habra dejado en el bugger de entrada un carater \n que si no pongo el espacio se guardaria en la variable letra	
+	scanf(" %c", &letra); //tengoo que dejar un espacio delante del %c, porque si no salta de linea y no se ejecuta el numero 1. Pongo un espacio antes del c porque el ultimo scanf habra dejado en el bugger de entrada un carater \n que si no pongo el espacio se guardaria en la variable letra	
 		
 	if(letra == 'a'){
 		printf("Es una vocal\n");
