@@ -61,7 +61,7 @@ void calcular_area_figura(){
 
 		resultado_area = 3.14159 * radio * radio;
 
-		printf("El area del círculo con area %.2f es: %f\n", radio, resultado_area);
+		printf("El araea del círculo con area %.2f es: %f\n", radio, resultado_area);
 		break;
 
 		case 2:
