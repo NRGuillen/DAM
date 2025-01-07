@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
-#define MAX_TITULO 80
-#define MAX_AUTOR 50
-#define MAX_LIBROS 40
+#define MAX_TITULO 80 //Defino el tamaño del titulo, no puede tener mas de 80 caracteres
+#define MAX_AUTOR 50 //Defino el tamaño del autor, el nombre del autor no puede tener mas de 50 caracteres
+#define MAX_LIBROS 40 //Defino la cantidad de libros, la biblioteca puede contener 40 libros
 
 typedef enum {
     FICTION, 
@@ -14,31 +15,26 @@ typedef enum {
 } Categoria;
 
 typedef struct {
-    int ID;
-    char titulo[MAX_TITULO];
-    char autor[MAX_AUTOR];
-    float precio;
-    Categoria categoria;
-    int cantidad;
-} Libro;
+    int ID; //ID de cada libro
+    char titulo[MAX_TITULO]; //Almacena el titulo de cada libro hasta 80 caracteres por el MAX_TITULO
+    char autor[MAX_AUTOR]; //Almacena el nombre de cada autor hasta 50 caracteres por el MAX_AUTOR
+    float precio; //Precio de cada libro en float por los precios decimales
+    Categoria categoria; //Variable que almacena los valores definidos en el typedef de Categoria
 
-/*
-Creo este void debido a que si no estaria repitiendo muchas veces los printf en distintos
-codigos es decir, con este void puedo hacer printf en void mostrarLibro y en void mostrarCantidadLibros
-*/
-void imprimirSoloCategoria(Libro *biblioteca){ //Libro *biblioteca es un puntero que esta apuntando al struct de Libro
+    /*
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
+                                                        ¿Porque Categoria no se pone dentro del tydef?
 
-            /*
-            Para acceder a los datos del struct se puede hacer de dos formas o con "->" o con ".ID".
-            En mi caso utilizo el  .ID ya que lo entiendo mejor pero tambien podria ser con "printf("ID: %d\n", biblioteca->ID)";
-            */
-            printf("\tEl libro con ID %d, es de categoria: %d\n", (*biblioteca).ID, (*biblioteca).categoria);
+        Categoria define un cojunto de valores constantes, en este caso las categorias, no van a cambiar siempre seran  FICTION NON_FICTION POETRY THEATER ESSAY
+        El typdef Categoria es independiente a Libro, por lo que se puede reutilizar en partes diferentes del probrama.
+        Si lo ponemos dentro de Libro limitariamos su uso y no seria eficiente para utilizarlo en otras lineas del programa.
+ 
+    */
 
-                                        /*<-------TAMBIEN ES VALIDO------->
-
-            printf("El libro con ID %d, es de categoria: %d\n", biblioteca->ID, biblioteca->categoria);
-                                                                                                        */                      
-}
+    int cantidad; //Cantidad de cada libro en la biblioteca, es decir libro 1 = 20 libros, libro 2 = 3 libros...
+} Libro; //Nombre de la estructura que va a representar un libro en la biblioteca
 
 void imprimirSoloUnLibro(Libro *biblioteca){ //Libro *biblioteca es un puntero que esta apuntando al struct de Libro
 
@@ -54,13 +50,31 @@ void imprimirSoloUnLibro(Libro *biblioteca){ //Libro *biblioteca es un puntero q
             printf("\tPrecio: %.2f\n", (*biblioteca).precio);              //printf("ID: %d\n", biblioteca->precio);
             printf("\tCategoria: %d\n", (*biblioteca).categoria);          //printf("ID: %d\n", biblioteca->categoria); 
             printf("\tCantidad disponible: %d\n", (*biblioteca).cantidad); //printf("ID: %d\n", biblioteca->cantidad);
+
+            /*
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
+
+                    ¿Cual es la diferencia entre  printf("\tID: %d\n", (*biblioteca).ID)     y     printf("ID: %d\n", biblioteca->ID)
+                    
+                    printf("\tID: %d\n", (*biblioteca).ID)
+                    ##Se usa para acceder a los campos de una estructura##
+                    biblioteca es un puntero a una estructura Libro, obtiene el valor de la estructura a la que apunta
+                    ID accede a la variable ID 
+                    printf("\tID: %d\n", (*biblioteca).ID); imprime el valor del campo ID de la estructura.
+
+
+                    printf("ID: %d\n", biblioteca->ID)
+                    ##Hace lo mismo pero es mas visual y abreviado##
+                    biblioteca->ID es una forma más corta de escribir (*biblioteca).ID. 
+                    El operador -> es una forma para acceder a las variables de una estructura a través de un puntero.
+
+                    CONCLUSION: Hacen la misma funcion, la diferencia es que uno es mas abreviado que el otro.
+
+            */
 }
 
-/*
-Este void lo he creado para mostrar el listado de todos los libros que hay en la biblioteca, declarada en el int main.
-Utilizo un puntero Libro *biblioteca para acceder a todos los libros que hay y un int totalLibros declarado en el main
-para marcar el limite de la lista, en este caso 40
-*/
 
 void mostrarTodosLosLibros(Libro *biblioteca, int totalLibros) { /*
                                                                  Libro *biblioteca es un puntero que esta apuntando a los datos de los libros
@@ -83,8 +97,9 @@ void mostrarTodosLosLibros(Libro *biblioteca, int totalLibros) { /*
     }
 }
 
-// Muestra un libro por ID
-void mostrarLibro(Libro *biblioteca, int totalLibros, int id) { /*
+
+void mostrarLibro(Libro *biblioteca, int totalLibros, int id) { // Muestra un libro por ID
+                                                                /*
                                                                 Libro *biblioteca es un puntero que esta apuntando a los datos de los libros.
                                                                 LLamo al totalLibros(del main) para indicar el limite de libros que hay, en este caso 40.
                                                                 LLamo al id(del main) para buscar el libro a traves del identificador.
@@ -113,12 +128,6 @@ void mostrarLibro(Libro *biblioteca, int totalLibros, int id) { /*
     
 }
 
-
-/*
-Este void lo he creado para mostrar la cantidad de un solo libro de la biblioteca, declarada en el int main.
-Utilizo un puntero Libro *biblioteca para acceder a la id de los libros que hay y un int totalLibros declarado en el main
-para marcar el limite de la lista, en este caso 40
-*/
 
 void mostrarCantidadLibros(Libro *biblioteca, int totalLibros, int id) {
                                                                         /*
@@ -149,70 +158,43 @@ void mostrarCantidadLibros(Libro *biblioteca, int totalLibros, int id) {
     }
 }  
 
-/*
-Este void lo he creado para modificar la cantidad de un solo libro de la biblioteca, declarada en el int main.
-Utilizo un puntero Libro *biblioteca para acceder a la id de los libros que hay y un int totalLibros declarado en el main
-para marcar el limite de la lista, en este caso 40.
-Este void realmente es la copia del void mostrarCantidadLibros solamente hay que añadir una suma para aumentar la cantidad que introduzca el usuario
-*/
-
-void añadirCantidadLibro (Libro *biblioteca, int totalLibros, int id) { 
-                                                                        /*
-                                                                        Declaro totalLibro para saber la cantidad de un libro y poder modificar dicha cantidad con un +=
-                                                                        Declaro id para acceder a la id del libro y poder modificar la cantidad.
-                                                                        */
-    if (id < 1 || id > totalLibros) { //Comprueba que el id este en el rango de 0 y 40 
-        printf("El ID ingresado no es válido. Debe estar entre 1 y el 40");
+void añadirCantidadLibro(Libro *biblioteca, int totalLibros, int id, int cantidad) {
+                                                                                    /*
+                                                                                    Declaro totalLibro para saber la cantidad de un libro y poder modificar dicha cantidad con un +=
+                                                                                    Declaro id para acceder a la id del libro y poder modificar la cantidad.
+                                                                                    */
+    if (id < 1 || id > totalLibros) { //Comprueba que el id este en el rango de 0 y 40
+        printf("El ID ingresado no es válido. Debe estar entre 1 y 40.\n");
+        return;
     }
     for (int i = 0; i < totalLibros; i++) { //Bucle para recorrer el array desde el 0 al 40.
         if ((biblioteca + i)->ID == id) { //Este if compara la ID de la lista, con el id introducido del usuario
-
-            int suma, num; //Declaro valiables para realizar el incremento
-
-            printf("Introduce la cantidad que quieres añadir: "); //Introduce la cantidad que quiere añadir
+            int num;
+            printf("Introduce la cantidad que quieres añadir: ");
             scanf("%d", &num);
+            (biblioteca + i)->cantidad += num; //Suma la cantidad que ya habia almacenada en biblioteca + el numero ingresado por el usuario
 
-            suma = (*biblioteca).cantidad + num; //Suma la cantidad que ya habia almacenada en biblioteca + el numero ingresado por el usuario
-
-            printf("\tCantidad actualizada del libro con ID %d: %d\n", id, suma);
+            printf("\tCantidad actualizada del libro con ID %d: %d\n", id, (biblioteca + i)->cantidad);
         }
-    } 
-} 
-
-/*
-Este void lo he creado para mostrar todos los libros que haya en una sola categoria.
-Utilizo un puntero Libro *biblioteca para acceder a la id de los libros que hay y un int totalLibros declarado en el main
-para marcar el limite de la lista, en este caso 40 y declaro categoria para el enum.
-*/
+    }
+}
 
 void mostrarLibrosPorCategoria(Libro *biblioteca, int totalLibros, Categoria categoria) {
-                                                                                        /*
-                                                                                        Declaro totalLibro para saber la cantidad de un libro y poder modificar dicha cantidad con un +=
-                                                                                        Declaro id para acceder a la id del libro y poder modificar la cantidad.
-                                                                                        */
-
-
+                                                                                         /*
+                                                                                         Declaro totalLibro para saber la cantidad de un libro y poder modificar dicha cantidad con un +=
+                                                                                         Declaro id para acceder a la id del libro y poder modificar la cantidad.
+                                                                                         */
     printf("Libros de la categoria %d:\n", categoria);
-    int encontrado = 0;
     for (int i = 0; i < totalLibros; i++) { //Bucle para recorrer el array desde el 0 al 40.
-        if ((biblioteca + i)->categoria == categoria) { //Este if compara las categorias de la lista, con la categoria introducida del usuario
+        if ((biblioteca + i)->categoria == categoria) {  //Este if compara las categorias de la lista, con la categoria introducida del usuario
             printf("\tID: %d\n  \tTitulo: %s\n  \tAutor: %s\n  \tPrecio: %.2f\n  \tCantidad: %d\n", (biblioteca + i)->ID, (biblioteca + i)->titulo, (biblioteca + i)->autor, (biblioteca + i)->precio, (biblioteca + i)->cantidad);
         }
     }
 }
 
-int main(int argc, char ** argv) {
-
-    int id, cantidadLibros;
-    Categoria categoria; //Declaro categoria para el "mostrarLibrosPorCategoria"
-    char respuesta[3]; // limito la respuesta a tres caracteres, si\0, no\0
-    int totalLibros = 40;//limito los libros a 40 ya que solo hay 40
-    int cantidad;
-
-
-
-    // Declaración de la biblioteca
-    Libro biblioteca[MAX_LIBROS] = {
+int main(int argc, char **argv) {
+    int totalLibros = 40;
+     Libro biblioteca[MAX_LIBROS] = {
         {1,  "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10},
         {2,  "1984", "George Orwell", 12.49, FICTION, 5},
         {3,  "The Great Gatsby", "F. Scott Fitzgerald", 10.99, FICTION, 8},
@@ -254,127 +236,83 @@ int main(int argc, char ** argv) {
         {39, "The Republic", "Plato", 16.00, ESSAY, 6},
         {40, "Thus Spoke Zarathustra", "Friedrich Nietzsche", 14.99, ESSAY, 10}
     };
+    /*
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
 
-    /*---------------EXPLICACION GLOBAR DE ESTOS IF------------------
-    #if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0)
-    #Comprueba que el usuario haya puesto un si, o Si, de lo contrario el codigo no se ejecutara ya que seria = 1.
+                                        ./miPrograma argumento1 argumento2 123
+                                            En este caso:
+                                            argc será 4.
 
+                                            argv[0] será "./miPrograma" (el nombre del programa).
+                                            argv[1] será "argumento1".
+                                            argv[2] será "argumento2".
+                                            argv[3] será "123".
 
-    #if(id >= 41){
-    #        printf("\tNo existe ningun libro con esa id\n");
-    #    }
-    #Si el id que introduce el usuario es mayor a 41( debido a que solo hay 40 libros) ejecuta el printf de error
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
 
-    #else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0)
-    #Comprueba que el usuario haya puesto un no, o No, de lo contrario el codigo no se ejecutara ya que seria = 1.
+                                        argc es el número total de argumentos que se pasan al programa al ejecutarlo, incluyendo el nombre del programa mismo
+                                        
+                                        ./biblioteca seria argc[1]
 
+                                        argv es un arreglo de cadenas de caracteres (también conocido como array de strings), que contiene los argumentos 
+                                        pasados al programa, empezando desde el índice 0.
+
+                                        ./biblioteca seria argv[0]
     */
-
-    printf("Lista de arguemtos (hay %d argumentos):\n",argc);
-    for(int i = 0; i<argc; i++){
-        printf("\t Argumento %d: %s\n",i,argv[i]);
+    if (argc < 2) {
+        printf("Comando no reconocido.\n");
+        return 1;
     }
 
-    if (argc == 1){
-        // Caso inicial.
-    } else if(argc == 2){
-        if (strcmp(argv[1],"mostrar") == 0){
-            mostrarTodosLosLibros(Libro *biblioteca, totalLibros);
-        }else if (strcmp(argv[1],"añadir") == 0){
-            añadirCantidadLibro (Libro *biblioteca,  totalLibros,  id);
+    if (strcmp(argv[1], "mostrar") == 0) { //argv[1] es el primer argumento que el usuario pasa.
+                                           //Lo que hace strcmp(argv[1], "mostrar") == 0 es comparar el primer argumento (argv[1]) con la cadena "mostrar". Es decir lo que introduce el usuario "mostrar"
+                                           //Si ambos son iguales (es decir, si el argumento pasado por el usuario es exactamente "mostrar"), entonces strcmp 
+                                           //devuelve 0 y la condición será verdadera.
+        if (argc == 2) { // argc 2 son los argumentos que el programa recibe inclyendo el nombre del programa
+                         // ./biblioteca mostrar
+                         // Hay 2 argumentos "biblioteca" y "mostrar"
+            mostrarTodosLosLibros(biblioteca, totalLibros);//Se ejecuta cuando argc sea igual a 2 argumentos
+        } else if (argc == 3) { //se ejecuta cuando hayan 3 argumentos
+            int id = atoi(argv[2]); //se convierte el tercer argumento a un numero entero 
+                                    //atoi convierte el valor de un texto a un numero entero, si un argumento no es valido atoi devuelve 0
+            mostrarLibro(biblioteca, totalLibros, id);//Se ejecuta cuando argc sea igual a 3 argumentos
+        } else {
+            printf("Comando no reconocido.\n");//Se ejecuta si se introduce 3 argumentos y alguno es invalido
         }
-    } else if(argc == 3){
-        /*if (strcmp(argv[1],"mostrar") == 0){
-            mostrarTodosLosLibros(Libro *biblioteca, totalLibros);
-        }else if (strcmp(argv[1],"añadir") == 0){
-            añadirCantidadLibro (Libro *biblioteca,  totalLibros,  id);
+    } else if (strcmp(argv[1], "stock") == 0) { //compara si el primer argumento es igual a "stock"
+        if (argc == 4) { //se ejecuta si hay 4 argumentos
+            int id = atoi(argv[2]); //convierte el argumento 2 a un numero entero 
+            int cantidad = atoi(argv[3]); //convierte el argumento 3 a un numero entero 
+            añadirCantidadLibro(biblioteca, totalLibros, id, cantidad); //Se ejecuta cuando hay 4 argumentos
+        } else {
+            printf("Comando no reconocido.\n"); //Se ejecuta si se introduce 4 argumentos y alguno es invalido
         }
-        */
-    } else if (argc == 4){
-         /*if (strcmp(argv[1],"mostrar") == 0){
-            mostrarTodosLosLibros(Libro *biblioteca, totalLibros);
-        }else if (strcmp(argv[1],"añadir") == 0){
-            añadirCantidadLibro (Libro *biblioteca,  totalLibros,  id);
+    } else if (strcmp(argv[1], "categoria") == 0) { //se reptite como en los anteriores casos
+        if (argc == 3) {
+            int categoria = atoi(argv[2]);
+            mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);
+        } else {
+            printf("Comando no reconocido.\n");
         }
-        */
-    }
-    /*---------------VISUALIZAR TODOS LOS LIBROS------------------*/
-
-    printf("¿Quieres visualizar todos los libros? (responde con si o no): ");
-    scanf("%s", respuesta);
-
-    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
-        mostrarTodosLosLibros(biblioteca, totalLibros);
-    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
-
+    /*} else if (strcmp(argv[1], "autor") == 0) {
+        if (argc == 3) {
+            char *autor = argv[2];
+        } else {
+            printf("Comando no reconocido.\n");
+        }*/
+    } else if (strcmp(argv[1], "añadir") == 0) { //se reptite como en los anteriores casos
+        printf("No se hacer la funcion :(.\n");
     } else {
-        printf("Has introducido un dato erroneo.\n");
-    }
-
-
-    /*---------------VISUALIZAR CARACTERISTICAS DE UN LIBRO------------------*/
-
-
-    printf("¿Quieres visualizar las características de algun libro? (responde con si o no): ");
-    scanf("%s", respuesta);
-
-    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
-        printf("Introduce el ID del libro: ");
-        scanf("%d", &id);
-        if(id >= 41){
-            printf("\tNo existe ningun libro con esa id\n");
-        }
-        mostrarLibro(biblioteca, totalLibros, id);
-    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
-       
-    } else {
-        printf("Has introducido un dato erroneo.\n");
-    }
-
-    /*---------------VISUALIZAR CANTIDAD DE UN LIBRO------------------*/
-
-    printf("¿Quieres visualizar la cantidad de un libro? (responde con si o no): ");
-    scanf("%s", respuesta);
-
-    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
-        printf("Introduce el ID del libro: ");
-        scanf("%d", &id);
-        mostrarCantidadLibros(biblioteca, totalLibros, id);  
-    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
-    
-    } else {
-        printf("Has introducido un dato erróneo.\n");
-    }
-
-    /*---------------MODIFICACION DEL STOCK DE UN LIBRO------------------*/
-
-    printf("¿Quieres modificar el stock de un libro? (responde con si o no): ");
-    scanf("%s", respuesta);
-
-    if (strcmp(respuesta, "si") == 0 || strcmp(respuesta, "Si") == 0) {
-        printf("Introduce el ID del libro: ");
-        scanf("%d", &id);
-        mostrarCantidadLibros(biblioteca,  totalLibros,  id); //Llamo el void mostrarCantidadLibros para visualizar la cantidad que tiene un libro.
-        añadirCantidadLibro (biblioteca, totalLibros, id); //Llamo el void añadirCantidadLibro para incrementar el stock.
-
-    } else if (strcmp(respuesta, "no") == 0 || strcmp(respuesta, "No") == 0) {
-    
-    } else {
-        printf("Has introducido un dato erróneo.\n");
-    }
-
-    /*-------------------------VISUALIZAR CATEGORIA-------------------------*/
-
-    printf("Introduce qué libros de la misma categoría quieres visualizar (0 = FICTION, 1 = POETRY, 2 = NON_FICTION, 3 = THEATER, 4 = ESSAY): ");
-    scanf("%d", &categoria);  // Capturamos la categoría como un valor entero
-
-    // Verificamos si la categoría es válida
-    if (categoria >= 0 && categoria <= 4) {
-        printf("Seleccionaste la categoria: %d\n", categoria);  // Imprimir categoría seleccionada
-        mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);  // Pasamos la categoría seleccionada
-    } else {
-        printf("\tCategoría no válida, por favor elige un valor entre 0 y 4.\n");
+        printf("Comando no reconocido.\n");
     }
 
     return 0;
 }
+
+
+  
+
