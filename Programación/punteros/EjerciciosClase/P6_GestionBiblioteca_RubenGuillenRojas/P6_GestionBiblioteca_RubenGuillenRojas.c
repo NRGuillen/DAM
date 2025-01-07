@@ -258,7 +258,7 @@ int main(int argc, char **argv) {
                                         
                                         ./biblioteca seria argc[1]
 
-                                        argv es un arreglo de cadenas de caracteres (también conocido como array de strings), que contiene los argumentos 
+                                        argv es un arreglo de cadenas de caracteres, que contiene los argumentos 
                                         pasados al programa, empezando desde el índice 0.
 
                                         ./biblioteca seria argv[0]
