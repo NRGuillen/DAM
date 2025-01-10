@@ -197,6 +197,7 @@ void mostrarLibrosPorCategoria(Libro *biblioteca, int totalLibros, Categoria cat
     }
 }
 
+<<<<<<< HEAD
 void mostrarAutor(Libro *biblioteca, int totalLibros, const char *nombreAutor) {
     int encontrado = 0;
 
@@ -213,6 +214,8 @@ void mostrarAutor(Libro *biblioteca, int totalLibros, const char *nombreAutor) {
 }
 
 
+=======
+>>>>>>> c1ae22403627891e8d8e93bff7492c9d61c73470
 int main(int argc, char*argv[]) {
     printf("Lista de Argumentos: \n");
     for (int i = 0; i < argc; i++) {
@@ -220,7 +223,10 @@ int main(int argc, char*argv[]) {
     }
 
     Libro *biblioteca = (Libro*) malloc(40 * sizeof(Libro)); 
+<<<<<<< HEAD
     char nombreAutor[100];
+=======
+>>>>>>> c1ae22403627891e8d8e93bff7492c9d61c73470
     int totalLibros = MAX_LIBROS; 
 
     inicializarLibro(&biblioteca[0], 1, "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10);
@@ -292,6 +298,7 @@ int main(int argc, char*argv[]) {
                                         ./biblioteca seria argv[0]
     */
 
+<<<<<<< HEAD
     printf("\n<-- Instrucciones para utilizar el programa -->\n\n");
     printf("Para seguir estas intrucciones debes de compilar el programa con el nombre P6_GestionBiblioteca_RubenGuillenRojas\n\n");
     printf("\t Para visualizar toda la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas mostrar\n");
@@ -302,6 +309,8 @@ int main(int argc, char*argv[]) {
     printf("\t Para añadir un libro a la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas añadir\n\n");
 
 
+=======
+>>>>>>> c1ae22403627891e8d8e93bff7492c9d61c73470
     if (argc < 2) {
         printf("Comando no reconocido.\n");
         return 1;
@@ -342,11 +351,26 @@ int main(int argc, char*argv[]) {
         } else {
             printf("Comando no reconocido.\n");
         }
+<<<<<<< HEAD
     }else if (strcmp(argv[1], "autor") == 0) {
+=======
+    } else {
+        printf("Comando no reconocido.\n");
+    }
+
+    /*
+
+                                                                #############################
+                                                                #####COSAS QUE ME FALTAN#####
+                                                                #############################
+
+    } else if (strcmp(argv[1], "autor") == 0) {
+>>>>>>> c1ae22403627891e8d8e93bff7492c9d61c73470
         if (argc == 3) {
             char nombreAutor = argv[2];
         mostrarAutor(biblioteca, totalLibros, nombreAutor);
         } else {
+<<<<<<< HEAD
         printf("Comando no reconocido.\n");
     }
 }
@@ -359,6 +383,11 @@ int main(int argc, char*argv[]) {
 
 
     } else if (strcmp(argv[1], "añadir") == 0) { 
+=======
+            printf("Comando no reconocido.\n");
+        }
+    } else if (strcmp(argv[1], "añadir") == 0) { //se reptite como en los anteriores casos
+>>>>>>> c1ae22403627891e8d8e93bff7492c9d61c73470
         printf("No se hacer la funcion :(.\n");
     } else {
         printf("Comando no reconocido.\n");
@@ -366,4 +395,8 @@ int main(int argc, char*argv[]) {
 
     */
     return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c1ae22403627891e8d8e93bff7492c9d61c73470
