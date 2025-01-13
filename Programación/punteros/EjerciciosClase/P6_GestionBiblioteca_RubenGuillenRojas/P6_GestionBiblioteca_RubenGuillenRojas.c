@@ -256,6 +256,9 @@ void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
     } while (respuesta == '1'); // Se pregunta si quiere seguir añadiendo
 }
 
+                                            //######################################
+                                            //#########FALTA ELIMINAR LIBRO#########
+                                            //######################################
 
 
 
@@ -394,6 +397,12 @@ if (strcmp(argv[1], "mostrar") == 0) {//argv[1] es el primer argumento que el us
 } else {
     printf("Comando no reconocido.\n");
 }
+
+    
+                                    //######################################
+                                    //#########FALTA ELIMINAR LIBRO#########
+                                    //######################################
+
 
 // Liberamos la memoria al finalizar
 free(biblioteca);
