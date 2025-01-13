@@ -196,6 +196,71 @@ void mostrarLibrosPorCategoria(Libro *biblioteca, int totalLibros, Categoria cat
     }
 }
 
+void mostrarAutor(Libro *biblioteca, int totalLibros, const char *nombreAutor) {
+    int encontrado = 0;
+
+    for (int i = 0; i < totalLibros; i++) {
+        if (strncmp(biblioteca[i].autor, nombreAutor, strlen(nombreAutor)) == 0) {
+            printf("Autor encontrado: %s (Título: %s, Índice: %d)\n", biblioteca[i].autor, biblioteca[i].titulo, i);
+            encontrado = 1;
+        }
+    }
+
+    if (!encontrado) {
+        printf("Autor no encontrado.\n");
+    }
+}
+
+void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
+    char respuesta;  // Variable para controlar si se desea seguir añadiendo libros
+
+    do {
+        Libro nuevoLibro;
+        int tipoCategoria;
+
+        printf("\nIntroduce los datos del nuevo libro:\n");
+        printf("Titulo: ");
+        scanf("%s", nuevoLibro.titulo);
+        printf("Autor: ");
+        scanf("%s", nuevoLibro.autor);
+        printf("Precio: ");
+        scanf("%f", &nuevoLibro.precio);
+        printf("Categoria (0=FICTION, 1=NON_FICTION, 2=POETRY, 3=THEATER, 4=ESSAY): ");
+        scanf("%d", &tipoCategoria); // Lee como int
+        nuevoLibro.categoria = (Categoria)tipoCategoria; // Asigna el valor como Categoria
+        printf("Cantidad: ");
+        scanf("%d", &nuevoLibro.cantidad);
+
+        nuevoLibro.ID = (*totalLibros) + 1;
+
+        (*biblioteca)[*totalLibros] = nuevoLibro;
+
+        (*totalLibros)++;
+
+        printf("\nLibro añadido exitosamente:\n");
+        printf("\tID: %d\n", nuevoLibro.ID);
+        printf("\tTitulo: %s\n", nuevoLibro.titulo);
+        printf("\tAutor: %s\n", nuevoLibro.autor);
+        printf("\tPrecio: %.2f\n", nuevoLibro.precio);
+        printf("\tCategoria: %d\n", nuevoLibro.categoria);
+        printf("\tCantidad disponible: %d\n", nuevoLibro.cantidad);
+
+        printf("\nCatálogo actualizado:\n");
+        mostrarTodosLosLibros(*biblioteca, *totalLibros);
+
+        // Aquí usamos getchar() para limpiar el buffer
+        printf("¿Quieres añadir otro libro? (1 para sí, 0 para no): ");
+        getchar();  // Limpia el salto de línea pendiente en el buffer
+        scanf("%c", &respuesta); // Ahora lee la respuesta correctamente
+
+    } while (respuesta == '1'); // Se pregunta si quiere seguir añadiendo
+}
+
+void borrarLibro(Libro **biblioteca, int *totalLibros, int id) {
+    
+}
+
+
 int main(int argc, char*argv[]) {
     printf("Lista de Argumentos: \n");
     for (int i = 0; i < argc; i++) {
@@ -274,68 +339,67 @@ int main(int argc, char*argv[]) {
                                         ./biblioteca seria argv[0]
     */
 
-    if (argc < 2) {
-        printf("Comando no reconocido.\n");
-        return 1;
-    }
+    printf("\n<-- Instrucciones para utilizar el programa -->\n\n");
+    printf("Para seguir estas intrucciones debes de compilar el programa con el nombre P6_GestionBiblioteca_RubenGuillenRojas\n\n");
+    printf("\t Para visualizar toda la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas mostrar\n");
+    printf("\t Para visualizar un solo libro ./P6_GestionBiblioteca_RubenGuillenRojas mostrar [ID del libro]\n");
+    printf("\t Para añadir sotck a un libro ./P6_GestionBiblioteca_RubenGuillenRojas stock [ID del libro] [Cantidad a añadir]\n");
+    printf("\t Para visualizar todos los libros de una categoria ./P6_GestionBiblioteca_RubenGuillenRojas categoria [0 -> FICTION, 1 -> NON_FICTION, 2 -> POETRY, 3 -> THEATER, 4 -> ESSAY]\n");
+    printf("\t Para visualizar un libro por autor ./P6_GestionBiblioteca_RubenGuillenRojas autor [nombre del autor]\n");
+    printf("\t Para añadir un libro a la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas añadir\n\n");
+    printf("\t Para borrar un libro a la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas borrar [ID del libro a borrar]\n\n");
 
-    if (strcmp(argv[1], "mostrar") == 0) { //argv[1] es el primer argumento que el usuario pasa.
+
+   if (argc < 2) {
+    printf("Comando no reconocido.\n");
+    return 1;
+}
+
+if (strcmp(argv[1], "mostrar") == 0) {//argv[1] es el primer argumento que el usuario pasa.
                                            //Lo que hace strcmp(argv[1], "mostrar") == 0 es comparar el primer argumento (argv[1]) con la cadena "mostrar". Es decir lo que introduce el usuario "mostrar"
-                                           //Si ambos son iguales (es decir, si el argumento pasado por el usuario es exactamente "mostrar"), entonces strcmp 
+                                           //Si ambos son iguales (es decir, si el argumento pasado por el usuario es exactamente "mostrar"), entonces strcmp
                                            //devuelve 0 y la condición será verdadera.
-    if (argc == 2) {     // argc 2 son los argumentos que el programa recibe inclyendo el nombre del programa
+    if (argc == 2) {    // argc 2 son los argumentos que el programa recibe inclyendo el nombre del programa
                          // ./biblioteca mostrar
                          // Hay 2 argumentos "biblioteca" y "mostrar"
         mostrarTodosLosLibros(biblioteca, totalLibros); //Se ejecuta cuando argc sea igual a 2 argumentos
-    } else if (argc == 3) {   //se ejecuta cuando hayan 3 argumentos
-        int id = atoi(argv[2]);  //se convierte el tercer argumento a un numero entero 
+    } else if (argc == 3) { //se ejecuta cuando hayan 3 argumentos
+        int id = atoi(argv[2]); //se convierte el tercer argumento a un numero entero
                                  //atoi convierte el valor de un texto a un numero entero, si un argumento no es valido atoi devuelve 0
         mostrarLibro(biblioteca, totalLibros, id); //Se ejecuta cuando argc sea igual a 3 argumentos
-    } else if (argc == 4) {
-        int id = atoi(argv[2]); 
-        int cantidad = atoi(argv[3]); 
-        añadirCantidadLibro(biblioteca, totalLibros, id, cantidad);
     } else {
         printf("Comando no reconocido.\n"); //Se ejecuta si se introduce 3 argumentos y alguno es invalido
     }
-
-    } else if (strcmp(argv[1], "stock") == 0) { //compara si el primer argumento es igual a "stock"
-        if (argc == 4) { //se ejecuta si hay 4 argumentos
-            int id = atoi(argv[2]); //convierte el argumento 2 a un numero entero 
-            int cantidad = atoi(argv[3]); //convierte el argumento 3 a un numero entero 
-            añadirCantidadLibro(biblioteca, totalLibros, id, cantidad); //Se ejecuta cuando hay 4 argumentos
-        } else {
-            printf("Comando no reconocido.\n"); //Se ejecuta si se introduce 4 argumentos y alguno es invalido
-        }
-    } else if (strcmp(argv[1], "categoria") == 0) { //se reptite como en los anteriores casos
-        if (argc == 3) {
-            int categoria = atoi(argv[2]);
-            mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);
-        } else {
-            printf("Comando no reconocido.\n");
-        }
+} else if (strcmp(argv[1], "stock") == 0) { //compara si el primer argumento es igual a "stock"
+    if (argc == 4) { //se ejecuta si hay 4 argumentos
+        int id = atoi(argv[2]); //convierte el argumento 2 a un numero entero
+        int cantidad = atoi(argv[3]); //convierte el argumento 3 a un numero entero
+        añadirCantidadLibro(biblioteca, totalLibros, id, cantidad); //Se ejecuta cuando hay 4 argumentos
+    } else {
+        printf("Comando no reconocido.\n"); //Se ejecuta si se introduce 4 argumentos y alguno es invalido
+    }
+} else if (strcmp(argv[1], "categoria") == 0) {
+    if (argc == 3) {
+        int categoria = atoi(argv[2]);
+        mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);
     } else {
         printf("Comando no reconocido.\n");
     }
-
-    /*
-
-                                                                #############################
-                                                                #####COSAS QUE ME FALTAN#####
-                                                                #############################
-
-    } else if (strcmp(argv[1], "autor") == 0) {
-        if (argc == 3) {
-            char *autor = argv[2];
-        } else {
-            printf("Comando no reconocido.\n");
-        }
-    } else if (strcmp(argv[1], "añadir") == 0) { //se reptite como en los anteriores casos
-        printf("No se hacer la funcion :(.\n");
+} else if (strcmp(argv[1], "autor") == 0) {
+    if (argc == 3) {
+        const char *nombreAutor = argv[2];
+        mostrarAutor(biblioteca, totalLibros, nombreAutor);
     } else {
         printf("Comando no reconocido.\n");
     }
+} else if (strcmp(argv[1], "añadir") == 0) {
+    añadirNuevoLibro(&biblioteca, &totalLibros);
+} else {
+    printf("Comando no reconocido.\n");
+}
 
-    */
-    return 0;
+// Liberamos la memoria al finalizar
+free(biblioteca);
+return 0;
+
 }
