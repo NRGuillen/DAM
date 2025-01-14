@@ -37,9 +37,12 @@ typedef struct {
 } Libro; //Nombre de la estructura que va a representar un libro en la biblioteca
 
 
+
+//inicializarLibro, sirve para asignar los valores a la estructura Libro (a la memoria dinamica).
+
 void inicializarLibro(Libro *libro, int id, const char *titulo, const char *autor, float precio, Categoria categoria, int cantidad) {
-    libro->ID = id;
-    strncpy(libro->titulo, titulo, MAX_TITULO);
+    libro->ID = id; //  con libro->ID, estamos accediendo al campo ID del Libro y le asignamos el valor de id
+    strncpy(libro->titulo, titulo, MAX_TITULO); // strncpy copia una cadena de caracteres (titulo) a otra (libro->titulo), con el limite de MAX_TITULO (80)
     strncpy(libro->autor, autor, MAX_AUTOR);
     libro->precio = precio;
     libro->categoria = categoria;
@@ -93,7 +96,7 @@ void mostrarTodosLosLibros(Libro *biblioteca, int totalLibros) { /*
                                                                  */
     printf("Lista de libros disponibles:\n"); //imprime toda la lista de libros
     for (int i = 0; i < totalLibros; i++) { //Bucle para recorrer el array desde el 0 al 40.
-                printf("\tID: %d\n  \tTitulo: %s\n  \tAutor: %s\n  \tPrecio: %.2f\n  \tCategoria: %d\n  \tCantidad: %d\n", (biblioteca + i)->ID, (biblioteca + i)->titulo, (biblioteca + i)->autor, (biblioteca + i)->precio, (biblioteca + i)->categoria, (biblioteca + i)->cantidad);
+                printf("\n\tID: %d\n  \tTitulo: %s\n  \tAutor: %s\n  \tPrecio: %.2f\n  \tCategoria: %d\n  \tCantidad: %d\n", (biblioteca + i)->ID, (biblioteca + i)->titulo, (biblioteca + i)->autor, (biblioteca + i)->precio, (biblioteca + i)->categoria, (biblioteca + i)->cantidad);
     
     /*
         Como es un listado solo quiero saber la ID del libro para poder buscarlo y su nombre, por lo tanto:
@@ -197,47 +200,188 @@ void mostrarLibrosPorCategoria(Libro *biblioteca, int totalLibros, Categoria cat
 }
 
 void mostrarAutor(Libro *biblioteca, int totalLibros, const char *nombreAutor) {
-    int encontrado = 0;
 
-    for (int i = 0; i < totalLibros; i++) {
+/*
+
+Libro *biblioteca, biblioteca apunta a la memoria donde esta almacenado el struct de Libro.
+
+   ###########
+   ##EJEMPLO##
+   ###########
+                                                                              typedef
+    struct =          int ID,    char titulo,         char autor,float precio, genero, int stock 
+
+        biblioteca[0] = {1, "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10}
+
+   int totalLibros, en este ejemplo "int totalLibros = 1", totalLibros seria igual a 1 debido a que solo hay 1 libro almacenado en la biblioteca
+
+
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
+
+   const char *nombreAutor, const indica que el string no debe de modificarse, es decir es constante. Si no estuviera el const, podria cambiar las
+   letras del string, pero como hay un const indica que no se puede cambiar los caracteres de nombreAutor.
+
+   char *nombreAutor, char* es un puntero que almacena la direccion de memoria de nombreAutor
+
+   ###########
+   ##EJEMPLO##
+   ###########
+
+   char *nombreAutor = "Harper Lee";
+
+   nombreAutor almacena la direccion de memoria donde comienza la cadena, es decir "Harper Lee"
+   como nombreAutor es un const puedo hacer que nombreAutor apunte a otra cadena de caracteres, pero no modificar su contenido 
+
+   ###########
+   ##EJEMPLO##
+   ###########
+
+   char *nombreAutor = "Harper Lee"; // nombreAutor apunta a la cadena literal
+
+   nombreAutor = "George Orwell"; // Ahora nombreAutor apunta a otra cadena
+
+
+
+
+*/
+    //se inicializa a 0 para que no contenga basura y se rompa el programa
+
+    for (int i = 0; i < totalLibros; i++) { //Bucle que recorre todos los libros de la biblioteca
         if (strncmp(biblioteca[i].autor, nombreAutor, strlen(nombreAutor)) == 0) {
-            printf("Autor encontrado: %s (Título: %s, Índice: %d)\n", biblioteca[i].autor, biblioteca[i].titulo, i);
-            encontrado = 1;
+
+            /*
+
+            biblioteca[i].autor contiene un char con el nombre del autor, cada vez que el bucle for incrementa la i, va pasando por todos los autores
+            nombreAutor contiene el nombre del autor que el usuario introduce (const char *nombreAutor = argv[2];)
+            strlen() calcula la longitud de la cadena nombreAutor. Es decir, devuelve el numero de caracteres que tiene el nombre del autor que el 
+            usuario esta buscando, el \0 no cuenta.
+            strncmp() cuenta los caracteres de nombreAutor, es decir cuenta el nombre del autor que el usuario busca.
+
+            ###########
+            ##EJEMPLO##
+            ###########
+
+            strncmp() cuenta los caracteres de nombreAutor, es decir cuenta el nombre del autor que el usuario busca.
+
+            Si el usuario busca Harper Lee, delvolvera 10 
+
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
+
+            if (strncmp(biblioteca[i].autor, nombreAutor, strlen(nombreAutor)) == 0)
+
+            La funcion compara los primeros strlen(nombreAutor) caracteres de biblioteca[i].autor con nombreAutor, es decir comprarara el nombre que el usuario
+            introduce con los autores de la biblioteca, si los primeros caracteres de las 2 cadenas son iguales strncmp devolvera 0 (coinciden)
+
+
+            */
+            printf("Autor buscado: %s \n\n\tLibros\n \nTítulo: %s \nÍndice: %d)\n\n\n", biblioteca[i].autor, biblioteca[i].titulo, i);
+
+            // biblioteca[i].autor -> Nombre del autor
+            // biblioteca[i].titulo -> Nombre del titulo
+            // i -> indice (i del bucle for)
         }
     }
 
-    if (!encontrado) {
-        printf("Autor no encontrado.\n");
-    }
 }
 
 void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
-    char respuesta;  // Variable para controlar si se desea seguir añadiendo libros
+    /*
 
-    do {
-        Libro nuevoLibro;
-        int tipoCategoria;
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
+
+            Libro **biblioteca 
+
+            1º puntero -> *biblioteca apunta a un bloque de memoria donde se almacena una lista dinamica de libros
+            2º puntero -> **biblioteca es el acceso a cada elemento dentro de ese bloque de memoria, es decir cada struct de cada Libro.
+
+            *totalLibros es el numero total de libros como un puntero para que la funcion pueda modificar ese valor, cada vez que añadamos un libro
+            el numero total de libros cambia.
+
+    */
+    int opcion = 1;  // Variable para preguntar si quiere seguir añadiendo libros, como el bucle va a funcionar siempre que opcion sea 1, 
+                     // cuando el usuario introduzca el 0, el bucle morira.
+
+    do { //Bucle para añadir mas de 1 libro o añadir 1 solo libro
+        Libro nuevoLibro; //declaro nuevoLibro, que sera el nuevo libro que el usuario añada
+        int tipoCategoria; //almacena la categoria del libro 0=FICTION, 1=NON_FICTION, 2=POETRY, 3=THEATER, 4=ESSAY
 
         printf("\nIntroduce los datos del nuevo libro:\n");
+        
         printf("Titulo: ");
-        scanf("%s", nuevoLibro.titulo);
+        scanf("%s", nuevoLibro.titulo); //la varibale nuevoLibro accede con un "." al titulo del struct 
+        
         printf("Autor: ");
-        scanf("%s", nuevoLibro.autor);
+        scanf("%s", nuevoLibro.autor); //la varibale nuevoLibro accede con un "." al autor del struct 
+        
         printf("Precio: ");
-        scanf("%f", &nuevoLibro.precio);
+        scanf("%f", &nuevoLibro.precio); // lo mismo
+        
         printf("Categoria (0=FICTION, 1=NON_FICTION, 2=POETRY, 3=THEATER, 4=ESSAY): ");
-        scanf("%d", &tipoCategoria); // Lee como int
-        nuevoLibro.categoria = (Categoria)tipoCategoria; // Asigna el valor como Categoria
+        scanf("%d", &tipoCategoria); // lo mismo
+        
         printf("Cantidad: ");
-        scanf("%d", &nuevoLibro.cantidad);
+        scanf("%d", &nuevoLibro.cantidad); // lo mismo
 
-        nuevoLibro.ID = (*totalLibros) + 1;
+        nuevoLibro.ID = (*totalLibros) + 1; //Aumenta el numero del ID, es decir si hay 40 libros + 1, el siguiente es el 41 y asi ninguno se repite.
 
+        
+        *biblioteca = (Libro *)realloc(*biblioteca, (*totalLibros + 1) * sizeof(Libro));
+        if (*biblioteca == NULL) { // Se ejecuta si no hay suficiente memoria diponible, o realloc no ha podido asignar la nueva memoria
+        /*
+
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
+
+        *biblioteca te da acceso al bloque de memoria que contiene los libros
+
+        realloc(*biblioteca, (*totalLibros + 1) * sizeof(Libro)):
+
+        realloc cambia el tamaño del bloque de memoria, en nuestro caso esta aumentando el tamaño de la memoria.
+        *biblioteca es el puntero que apunta al bloque de memoria y le da acceso a realloc para modificarlo
+        (*totalLibros + 1) * sizeof(Libro) es el nuevo tamaño del bloque, es decir + 1 libro
+        * sizeof(Libro) devuelve el tamaño del un libro en bytes, es decir   (*totalLibros + 1) * sizeof(Libro) calcula el numero total de 
+        bytes que van a necesitar para almacenar 1 libro y esto se le da al realloc para cambiar el tamaño de la memoria donde se almacenan los libros.
+
+        */
+            printf("Error: NULL\n"); 
+        }
+
+        
         (*biblioteca)[*totalLibros] = nuevoLibro;
+        /*
 
-        (*totalLibros)++;
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
 
-        printf("\nLibro añadido exitosamente:\n");
+        
+        *biblioteca accede al puntero que esta apuntando a Libro, es decir es un arreglo dinamico de libro que se crea con realloc (*biblioteca = (Libro *)realloc(*biblioteca, (*totalLibros + 1) * sizeof(Libro));)
+        [*totalLibros] tiene [], porque estamos accediendo a una posicion especifica de un arreglo(char) 
+        
+        ###########
+        ##EJEMPLO##
+        ###########
+
+        Si hay 5 libros en el arreglo *totalLibros sera 5,  lo que indica que el siguiente libro se almacenara en la posición 5 del 
+        arreglo (es decir, el sexto libro, los arreglos empiezan desde el 0 hasta n)
+
+        */
+
+        (*totalLibros)++; // Incrementa totalLibros, es decir la memoria que almacena los libros, en nuestro caso tenemos 40 libros(0-39 = 40), 
+        //cuando añadamos 1 pasara a ser 40
+
+        
+
+        //Se muestra el nuevo libro 
+
+        printf("\nLibro nuevo:\n");
         printf("\tID: %d\n", nuevoLibro.ID);
         printf("\tTitulo: %s\n", nuevoLibro.titulo);
         printf("\tAutor: %s\n", nuevoLibro.autor);
@@ -245,22 +389,15 @@ void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
         printf("\tCategoria: %d\n", nuevoLibro.categoria);
         printf("\tCantidad disponible: %d\n", nuevoLibro.cantidad);
 
-        printf("\nCatálogo actualizado:\n");
-        mostrarTodosLosLibros(*biblioteca, *totalLibros);
+        mostrarTodosLosLibros(*biblioteca, *totalLibros);//Muestra todo el catalogo + los libros añadidos
 
-        // Aquí usamos getchar() para limpiar el buffer
+        //pregunta si quiere añadir mas libros, como el bucle funciona si opcion es 1, al cambiar la opcion a 0, el bucle muere.
+
         printf("¿Quieres añadir otro libro? (1 para sí, 0 para no): ");
-        getchar();  // Limpia el salto de línea pendiente en el buffer
-        scanf("%c", &respuesta); // Ahora lee la respuesta correctamente
+        scanf("%d", &opcion);
 
-    } while (respuesta == '1'); // Se pregunta si quiere seguir añadiendo
+    } while (opcion == 1); // siempre que sea 1, se ejecuta el codigo de arriba 
 }
-
-                                            //######################################
-                                            //#########FALTA ELIMINAR LIBRO#########
-                                            //######################################
-
-
 
 int main(int argc, char*argv[]) {
     printf("Lista de Argumentos: \n");
@@ -350,58 +487,79 @@ int main(int argc, char*argv[]) {
     printf("\t Para añadir un libro a la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas añadir\n\n");
 
 
-   if (argc < 2) {
+// Verifica que se haya pasado al menos un argumento al programa
+if (argc < 2) {
     printf("Comando no reconocido.\n");
     return 1;
 }
 
-if (strcmp(argv[1], "mostrar") == 0) {//argv[1] es el primer argumento que el usuario pasa.
-                                           //Lo que hace strcmp(argv[1], "mostrar") == 0 es comparar el primer argumento (argv[1]) con la cadena "mostrar". Es decir lo que introduce el usuario "mostrar"
-                                           //Si ambos son iguales (es decir, si el argumento pasado por el usuario es exactamente "mostrar"), entonces strcmp
-                                           //devuelve 0 y la condición será verdadera.
-    if (argc == 2) {    // argc 2 son los argumentos que el programa recibe inclyendo el nombre del programa
-                         // ./biblioteca mostrar
-                         // Hay 2 argumentos "biblioteca" y "mostrar"
-        mostrarTodosLosLibros(biblioteca, totalLibros); //Se ejecuta cuando argc sea igual a 2 argumentos
-    } else if (argc == 3) { //se ejecuta cuando hayan 3 argumentos
-        int id = atoi(argv[2]); //se convierte el tercer argumento a un numero entero
-                                 //atoi convierte el valor de un texto a un numero entero, si un argumento no es valido atoi devuelve 0
-        mostrarLibro(biblioteca, totalLibros, id); //Se ejecuta cuando argc sea igual a 3 argumentos
-    } else {
-        printf("Comando no reconocido.\n"); //Se ejecuta si se introduce 3 argumentos y alguno es invalido
+// Comando "mostrar"
+if (strcmp(argv[1], "mostrar") == 0) {
+    // Si solo hay dos argumentos, muestra todos los libros
+    if (argc == 2) { 
+        mostrarTodosLosLibros(biblioteca, totalLibros); 
     }
-} else if (strcmp(argv[1], "stock") == 0) { //compara si el primer argumento es igual a "stock"
-    if (argc == 4) { //se ejecuta si hay 4 argumentos
-        int id = atoi(argv[2]); //convierte el argumento 2 a un numero entero
-        int cantidad = atoi(argv[3]); //convierte el argumento 3 a un numero entero
-        añadirCantidadLibro(biblioteca, totalLibros, id, cantidad); //Se ejecuta cuando hay 4 argumentos
-    } else {
-        printf("Comando no reconocido.\n"); //Se ejecuta si se introduce 4 argumentos y alguno es invalido
-    }
-} else if (strcmp(argv[1], "categoria") == 0) {
-    if (argc == 3) {
-        int categoria = atoi(argv[2]);
-        mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);
-    } else {
+    // Si hay tres argumentos, muestra un libro específico por ID
+    else if (argc == 3) { 
+        int id = atoi(argv[2]); // Convierte el tercer argumento a entero
+        mostrarLibro(biblioteca, totalLibros, id);
+    } 
+    // Si el numero de argumentos no es valido
+    else { 
         printf("Comando no reconocido.\n");
     }
-} else if (strcmp(argv[1], "autor") == 0) {
-    if (argc == 3) {
-        const char *nombreAutor = argv[2];
-        mostrarAutor(biblioteca, totalLibros, nombreAutor);
-    } else {
-        printf("Comando no reconocido.\n");
-    }
-} else if (strcmp(argv[1], "añadir") == 0) {
-    añadirNuevoLibro(&biblioteca, &totalLibros);
-} else {
-    printf("Comando no reconocido.\n");
 }
 
-    
-                                    //######################################
-                                    //#########FALTA ELIMINAR LIBRO#########
-                                    //######################################
+// Comando "stock"
+else if (strcmp(argv[1], "stock") == 0) {
+    // Si hay cuatro argumentos, actualiza el stock de un libro
+    if (argc == 4) { 
+        int id = atoi(argv[2]); // Convierte el segundo argumento a entero (ID)
+        int cantidad = atoi(argv[3]); // Convierte el tercer argumento a entero (cantidad)
+        añadirCantidadLibro(biblioteca, totalLibros, id, cantidad);
+    } 
+    // Si el numero de argumentos no es valido
+    else { 
+        printf("Comando no reconocido.\n");
+    }
+}
+
+// Comando "categoria"
+else if (strcmp(argv[1], "categoria") == 0) {
+    // Si hay tres argumentos, muestra los libros de una categoría específica
+    if (argc == 3) { 
+        int categoria = atoi(argv[2]); // Convierte el segundo argumento a entero (categoria)
+        mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);
+    } 
+    // Si el numero de argumentos no es valido
+    else { 
+        printf("Comando no reconocido.\n");
+    }
+}
+
+// Comando "autor"
+else if (strcmp(argv[1], "autor") == 0) {
+    // Si hay tres argumentos, muestra los libros de un autor especifico
+    if (argc == 3) { 
+        const char *nombreAutor = argv[2]; // Toma el nombre del autor directamente como cadena
+        mostrarAutor(biblioteca, totalLibros, nombreAutor);
+    } 
+    // Si el numero de argumentos no es valido
+    else { 
+        printf("Comando no reconocido.\n");
+    }
+}
+
+// Comando "añadir"
+else if (strcmp(argv[1], "añadir") == 0) {
+    // Añade un nuevo libro a la biblioteca
+    añadirNuevoLibro(&biblioteca, &totalLibros);
+}
+
+// Si el comando no coincide con ninguno de los anteriores
+else {
+    printf("Comando no reconocido.\n");
+}
 
 
 // Liberamos la memoria al finalizar
