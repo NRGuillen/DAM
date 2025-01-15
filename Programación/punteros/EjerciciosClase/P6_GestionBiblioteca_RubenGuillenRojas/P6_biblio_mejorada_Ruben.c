@@ -6,6 +6,8 @@
 #define MAX_AUTOR 50 //Defino el tamaño del autor, el nombre del autor no puede tener mas de 50 caracteres
 #define MAX_LIBROS 40 //Defino la cantidad de libros, la biblioteca puede contener 40 libros
 
+
+
 typedef enum {
     FICTION, 
     NON_FICTION,
@@ -36,9 +38,186 @@ typedef struct {
     int cantidad; //Cantidad de cada libro en la biblioteca, es decir libro 1 = 20 libros, libro 2 = 3 libros...
 } Libro; //Nombre de la estructura que va a representar un libro en la biblioteca
 
-
+void inicializarLibro(Libro *libro, int id, const char *titulo, const char *autor, float precio, Categoria categoria, int cantidad);
+void imprimirSoloUnLibro(Libro *biblioteca);
+void mostrarTodosLosLibros(Libro *biblioteca, int totalLibros);
+void mostrarLibro(Libro *biblioteca, int totalLibros, int id);
+void mostrarCantidadLibros(Libro *biblioteca, int totalLibros, int id);
+void añadirCantidadLibro(Libro *biblioteca, int totalLibros, int id, int cantidad);
+void mostrarLibrosPorCategoria(Libro *biblioteca, int totalLibros, Categoria categoria);
+void mostrarAutor(Libro *biblioteca, int totalLibros, const char *nombreAutor);
+void añadirNuevoLibro(Libro **biblioteca, int *totalLibros);
 
 //inicializarLibro, sirve para asignar los valores a la estructura Libro (a la memoria dinamica).
+
+int main(int argc, char*argv[]) {
+    printf("Lista de Argumentos: \n");
+    for (int i = 0; i < argc; i++) {
+        printf("\t Argumento %d: %s\n", i+1, argv[i]);
+    }
+
+    Libro *biblioteca = (Libro*) malloc(40 * sizeof(Libro)); 
+    int totalLibros = MAX_LIBROS; 
+
+    inicializarLibro(&biblioteca[0], 1, "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10);
+    inicializarLibro(&biblioteca[1], 2, "1984", "George Orwell", 12.49, FICTION, 5);
+    inicializarLibro(&biblioteca[2], 3, "The Great Gatsby", "F. Scott Fitzgerald", 10.99, FICTION, 8);
+    inicializarLibro(&biblioteca[3], 4, "Moby Dick", "Herman Melville", 18.99, FICTION, 12);
+    inicializarLibro(&biblioteca[4], 5, "War and Peace", "Leo Tolstoy", 20.00, FICTION, 7);
+    inicializarLibro(&biblioteca[5], 6, "Pride and Prejudice", "Jane Austen", 14.99, FICTION, 9);
+    inicializarLibro(&biblioteca[6], 7, "The Catcher in the Rye", "J.D. Salinger", 10.00, FICTION, 6);
+    inicializarLibro(&biblioteca[7], 8, "The Odyssey", "Homer", 17.49, FICTION, 4);
+    inicializarLibro(&biblioteca[8], 9, "Ulysses", "James Joyce", 25.00, FICTION, 2);
+    inicializarLibro(&biblioteca[9], 10, "The Divine Comedy", "Dante Alighieri", 22.00, POETRY, 3);
+    inicializarLibro(&biblioteca[10], 11, "Leaves of Grass", "Walt Whitman", 13.00, POETRY, 11);
+    inicializarLibro(&biblioteca[11], 12, "The Iliad", "Homer", 18.50, FICTION, 7);
+    inicializarLibro(&biblioteca[12], 13, "A Brief History of Time", "Stephen Hawking", 15.00, NON_FICTION, 15);
+    inicializarLibro(&biblioteca[13], 14, "The Art of War", "Sun Tzu", 9.99, NON_FICTION, 20);
+    inicializarLibro(&biblioteca[14], 15, "Sapiens: A Brief History of Humankind", "Yuval Noah Harari", 16.49, NON_FICTION, 13);
+    inicializarLibro(&biblioteca[15], 16, "The Selfish Gene", "Richard Dawkins", 14.00, NON_FICTION, 6);
+    inicializarLibro(&biblioteca[16], 17, "The Road to Serfdom", "F.A. Hayek", 10.50, NON_FICTION, 5);
+    inicializarLibro(&biblioteca[17], 18, "The Wealth of Nations", "Adam Smith", 30.00, NON_FICTION, 8);
+    inicializarLibro(&biblioteca[18], 19, "On the Origin of Species", "Charles Darwin", 24.99, NON_FICTION, 4);
+    inicializarLibro(&biblioteca[19], 20, "The Prince", "Niccolò Machiavelli", 8.99, NON_FICTION, 14);
+    inicializarLibro(&biblioteca[20], 21, "Hamlet", "William Shakespeare", 11.50, THEATER, 6);
+    inicializarLibro(&biblioteca[21], 22, "Macbeth", "William Shakespeare", 9.50, THEATER, 8);
+    inicializarLibro(&biblioteca[22], 23, "Othello", "William Shakespeare", 10.99, THEATER, 7);
+    inicializarLibro(&biblioteca[23], 24, "A Doll's House", "Henrik Ibsen", 12.50, THEATER, 5);
+    inicializarLibro(&biblioteca[24], 25, "Waiting for Godot", "Samuel Beckett", 13.99, THEATER, 4);
+    inicializarLibro(&biblioteca[25], 26, "Death of a Salesman", "Arthur Miller", 14.99, THEATER, 10);
+    inicializarLibro(&biblioteca[26], 27, "The Glass Menagerie", "Tennessee Williams", 11.00, THEATER, 9);
+    inicializarLibro(&biblioteca[27], 28, "Long Day's Journey into Night", "Eugene O'Neill", 19.50, THEATER, 3);
+    inicializarLibro(&biblioteca[28], 29, "The Importance of Being Earnest", "Oscar Wilde", 8.50, THEATER, 15);
+    inicializarLibro(&biblioteca[29], 30, "The Waste Land", "T.S. Eliot", 6.99, POETRY, 10);
+    inicializarLibro(&biblioteca[30], 31, "Paradise Lost", "John Milton", 12.00, POETRY, 7);
+    inicializarLibro(&biblioteca[31], 32, "Beowulf", "Anonymous", 15.00, POETRY, 5);
+    inicializarLibro(&biblioteca[32], 33, "Essays", "Michel de Montaigne", 20.00, ESSAY, 4);
+    inicializarLibro(&biblioteca[33], 34, "Self-Reliance and Other Essays", "Ralph Waldo Emerson", 9.00, ESSAY, 9);
+    inicializarLibro(&biblioteca[34], 35, "Civil Disobedience and Other Essays", "Henry David Thoreau", 7.50, ESSAY, 11);
+    inicializarLibro(&biblioteca[35], 36, "Meditations", "Marcus Aurelius", 11.99, ESSAY, 8);
+    inicializarLibro(&biblioteca[36], 37, "The Federalist Papers", "Alexander Hamilton, James Madison, John Jay", 18.00, ESSAY, 5);
+    inicializarLibro(&biblioteca[37], 38, "The Communist Manifesto", "Karl Marx and Friedrich Engels", 5.99, ESSAY, 12);
+    inicializarLibro(&biblioteca[38], 39, "The Republic", "Plato", 16.00, ESSAY, 6);
+    inicializarLibro(&biblioteca[39], 40, "Thus Spoke Zarathustra", "Friedrich Nietzsche", 14.99, ESSAY, 10);
+
+    /*
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
+
+                                        ./miPrograma argumento1 argumento2 123
+                                            En este caso:
+                                            argc será 4.
+
+                                            argv[0] será "./miPrograma" (el nombre del programa).
+                                            argv[1] será "argumento1".
+                                            argv[2] será "argumento2".
+                                            argv[3] será "123".
+
+                                                                ############################
+                                                                #########IMPORTANTE#########
+                                                                ############################
+
+                                        argc es el número total de argumentos que se pasan al programa al ejecutarlo, incluyendo el nombre del programa mismo
+                                        
+                                        ./biblioteca seria argc[1]
+
+                                        argv es un arreglo de cadenas de caracteres, que contiene los argumentos 
+                                        pasados al programa, empezando desde el índice 0.
+
+                                        ./biblioteca seria argv[0]
+    */
+
+    printf("\n<-- Instrucciones para utilizar el programa -->\n\n");
+    printf("Para seguir estas intrucciones debes de compilar el programa con el nombre P6_GestionBiblioteca_RubenGuillenRojas\n\n");
+    printf("\t Para visualizar toda la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas mostrar\n");
+    printf("\t Para visualizar un solo libro ./P6_GestionBiblioteca_RubenGuillenRojas mostrar [ID del libro]\n");
+    printf("\t Para añadir sotck a un libro ./P6_GestionBiblioteca_RubenGuillenRojas stock [ID del libro] [Cantidad a añadir]\n");
+    printf("\t Para visualizar todos los libros de una categoria ./P6_GestionBiblioteca_RubenGuillenRojas categoria [0 -> FICTION, 1 -> NON_FICTION, 2 -> POETRY, 3 -> THEATER, 4 -> ESSAY]\n");
+    printf("\t Para visualizar un libro por autor ./P6_GestionBiblioteca_RubenGuillenRojas autor [nombre del autor]\n");
+    printf("\t Para añadir un libro a la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas añadir\n\n");
+
+
+// Verifica que se haya pasado al menos un argumento al programa
+if (argc < 2) {
+    printf("Comando no reconocido.\n");
+    return 1;
+}
+
+// Comando "mostrar"
+if (strcmp(argv[1], "mostrar") == 0) {
+    // Si solo hay dos argumentos, muestra todos los libros
+    if (argc == 2) { 
+        mostrarTodosLosLibros(biblioteca, totalLibros); 
+    }
+    // Si hay tres argumentos, muestra un libro específico por ID
+    else if (argc == 3) { 
+        int id = atoi(argv[2]); // Convierte el tercer argumento a entero
+        mostrarLibro(biblioteca, totalLibros, id);
+    } 
+    // Si el numero de argumentos no es valido
+    else { 
+        printf("Comando no reconocido.\n");
+    }
+}
+
+// Comando "stock"
+else if (strcmp(argv[1], "stock") == 0) {
+    // Si hay cuatro argumentos, actualiza el stock de un libro
+    if (argc == 4) { 
+        int id = atoi(argv[2]); // Convierte el segundo argumento a entero (ID)
+        int cantidad = atoi(argv[3]); // Convierte el tercer argumento a entero (cantidad)
+        añadirCantidadLibro(biblioteca, totalLibros, id, cantidad);
+    } 
+    // Si el numero de argumentos no es valido
+    else { 
+        printf("Comando no reconocido.\n");
+    }
+}
+
+// Comando "categoria"
+else if (strcmp(argv[1], "categoria") == 0) {
+    // Si hay tres argumentos, muestra los libros de una categoría específica
+    if (argc == 3) { 
+        int categoria = atoi(argv[2]); // Convierte el segundo argumento a entero (categoria)
+        mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);
+    } 
+    // Si el numero de argumentos no es valido
+    else { 
+        printf("Comando no reconocido.\n");
+    }
+}
+
+// Comando "autor"
+else if (strcmp(argv[1], "autor") == 0) {
+    // Si hay tres argumentos, muestra los libros de un autor especifico
+    if (argc == 3) { 
+        const char *nombreAutor = argv[2]; // Toma el nombre del autor directamente como cadena
+        mostrarAutor(biblioteca, totalLibros, nombreAutor);
+    } 
+    // Si el numero de argumentos no es valido
+    else { 
+        printf("Comando no reconocido.\n");
+    }
+}
+
+// Comando "añadir"
+else if (strcmp(argv[1], "añadir") == 0) {
+    // Añade un nuevo libro a la biblioteca
+    añadirNuevoLibro(&biblioteca, &totalLibros);
+}
+
+// Si el comando no coincide con ninguno de los anteriores
+else {
+    printf("Comando no reconocido.\n");
+}
+
+
+// Liberamos la memoria al finalizar
+free(biblioteca);
+return 0;
+
+}
 
 void inicializarLibro(Libro *libro, int id, const char *titulo, const char *autor, float precio, Categoria categoria, int cantidad) {
     libro->ID = id; //  con libro->ID, estamos accediendo al campo ID del Libro y le asignamos el valor de id
@@ -406,173 +585,4 @@ void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
         scanf("%d", &opcion);
 
     } while (opcion == 1); // siempre que sea 1, se ejecuta el codigo de arriba 
-}
-
-int main(int argc, char*argv[]) {
-    printf("Lista de Argumentos: \n");
-    for (int i = 0; i < argc; i++) {
-        printf("\t Argumento %d: %s\n", i+1, argv[i]);
-    }
-
-    Libro *biblioteca = (Libro*) malloc(40 * sizeof(Libro)); 
-    int totalLibros = MAX_LIBROS; 
-
-    inicializarLibro(&biblioteca[0], 1, "To Kill a Mockingbird", "Harper Lee", 15.99, FICTION, 10);
-    inicializarLibro(&biblioteca[1], 2, "1984", "George Orwell", 12.49, FICTION, 5);
-    inicializarLibro(&biblioteca[2], 3, "The Great Gatsby", "F. Scott Fitzgerald", 10.99, FICTION, 8);
-    inicializarLibro(&biblioteca[3], 4, "Moby Dick", "Herman Melville", 18.99, FICTION, 12);
-    inicializarLibro(&biblioteca[4], 5, "War and Peace", "Leo Tolstoy", 20.00, FICTION, 7);
-    inicializarLibro(&biblioteca[5], 6, "Pride and Prejudice", "Jane Austen", 14.99, FICTION, 9);
-    inicializarLibro(&biblioteca[6], 7, "The Catcher in the Rye", "J.D. Salinger", 10.00, FICTION, 6);
-    inicializarLibro(&biblioteca[7], 8, "The Odyssey", "Homer", 17.49, FICTION, 4);
-    inicializarLibro(&biblioteca[8], 9, "Ulysses", "James Joyce", 25.00, FICTION, 2);
-    inicializarLibro(&biblioteca[9], 10, "The Divine Comedy", "Dante Alighieri", 22.00, POETRY, 3);
-    inicializarLibro(&biblioteca[10], 11, "Leaves of Grass", "Walt Whitman", 13.00, POETRY, 11);
-    inicializarLibro(&biblioteca[11], 12, "The Iliad", "Homer", 18.50, FICTION, 7);
-    inicializarLibro(&biblioteca[12], 13, "A Brief History of Time", "Stephen Hawking", 15.00, NON_FICTION, 15);
-    inicializarLibro(&biblioteca[13], 14, "The Art of War", "Sun Tzu", 9.99, NON_FICTION, 20);
-    inicializarLibro(&biblioteca[14], 15, "Sapiens: A Brief History of Humankind", "Yuval Noah Harari", 16.49, NON_FICTION, 13);
-    inicializarLibro(&biblioteca[15], 16, "The Selfish Gene", "Richard Dawkins", 14.00, NON_FICTION, 6);
-    inicializarLibro(&biblioteca[16], 17, "The Road to Serfdom", "F.A. Hayek", 10.50, NON_FICTION, 5);
-    inicializarLibro(&biblioteca[17], 18, "The Wealth of Nations", "Adam Smith", 30.00, NON_FICTION, 8);
-    inicializarLibro(&biblioteca[18], 19, "On the Origin of Species", "Charles Darwin", 24.99, NON_FICTION, 4);
-    inicializarLibro(&biblioteca[19], 20, "The Prince", "Niccolò Machiavelli", 8.99, NON_FICTION, 14);
-    inicializarLibro(&biblioteca[20], 21, "Hamlet", "William Shakespeare", 11.50, THEATER, 6);
-    inicializarLibro(&biblioteca[21], 22, "Macbeth", "William Shakespeare", 9.50, THEATER, 8);
-    inicializarLibro(&biblioteca[22], 23, "Othello", "William Shakespeare", 10.99, THEATER, 7);
-    inicializarLibro(&biblioteca[23], 24, "A Doll's House", "Henrik Ibsen", 12.50, THEATER, 5);
-    inicializarLibro(&biblioteca[24], 25, "Waiting for Godot", "Samuel Beckett", 13.99, THEATER, 4);
-    inicializarLibro(&biblioteca[25], 26, "Death of a Salesman", "Arthur Miller", 14.99, THEATER, 10);
-    inicializarLibro(&biblioteca[26], 27, "The Glass Menagerie", "Tennessee Williams", 11.00, THEATER, 9);
-    inicializarLibro(&biblioteca[27], 28, "Long Day's Journey into Night", "Eugene O'Neill", 19.50, THEATER, 3);
-    inicializarLibro(&biblioteca[28], 29, "The Importance of Being Earnest", "Oscar Wilde", 8.50, THEATER, 15);
-    inicializarLibro(&biblioteca[29], 30, "The Waste Land", "T.S. Eliot", 6.99, POETRY, 10);
-    inicializarLibro(&biblioteca[30], 31, "Paradise Lost", "John Milton", 12.00, POETRY, 7);
-    inicializarLibro(&biblioteca[31], 32, "Beowulf", "Anonymous", 15.00, POETRY, 5);
-    inicializarLibro(&biblioteca[32], 33, "Essays", "Michel de Montaigne", 20.00, ESSAY, 4);
-    inicializarLibro(&biblioteca[33], 34, "Self-Reliance and Other Essays", "Ralph Waldo Emerson", 9.00, ESSAY, 9);
-    inicializarLibro(&biblioteca[34], 35, "Civil Disobedience and Other Essays", "Henry David Thoreau", 7.50, ESSAY, 11);
-    inicializarLibro(&biblioteca[35], 36, "Meditations", "Marcus Aurelius", 11.99, ESSAY, 8);
-    inicializarLibro(&biblioteca[36], 37, "The Federalist Papers", "Alexander Hamilton, James Madison, John Jay", 18.00, ESSAY, 5);
-    inicializarLibro(&biblioteca[37], 38, "The Communist Manifesto", "Karl Marx and Friedrich Engels", 5.99, ESSAY, 12);
-    inicializarLibro(&biblioteca[38], 39, "The Republic", "Plato", 16.00, ESSAY, 6);
-    inicializarLibro(&biblioteca[39], 40, "Thus Spoke Zarathustra", "Friedrich Nietzsche", 14.99, ESSAY, 10);
-
-    /*
-                                                                ############################
-                                                                #########IMPORTANTE#########
-                                                                ############################
-
-                                        ./miPrograma argumento1 argumento2 123
-                                            En este caso:
-                                            argc será 4.
-
-                                            argv[0] será "./miPrograma" (el nombre del programa).
-                                            argv[1] será "argumento1".
-                                            argv[2] será "argumento2".
-                                            argv[3] será "123".
-
-                                                                ############################
-                                                                #########IMPORTANTE#########
-                                                                ############################
-
-                                        argc es el número total de argumentos que se pasan al programa al ejecutarlo, incluyendo el nombre del programa mismo
-                                        
-                                        ./biblioteca seria argc[1]
-
-                                        argv es un arreglo de cadenas de caracteres, que contiene los argumentos 
-                                        pasados al programa, empezando desde el índice 0.
-
-                                        ./biblioteca seria argv[0]
-    */
-
-    printf("\n<-- Instrucciones para utilizar el programa -->\n\n");
-    printf("Para seguir estas intrucciones debes de compilar el programa con el nombre P6_GestionBiblioteca_RubenGuillenRojas\n\n");
-    printf("\t Para visualizar toda la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas mostrar\n");
-    printf("\t Para visualizar un solo libro ./P6_GestionBiblioteca_RubenGuillenRojas mostrar [ID del libro]\n");
-    printf("\t Para añadir sotck a un libro ./P6_GestionBiblioteca_RubenGuillenRojas stock [ID del libro] [Cantidad a añadir]\n");
-    printf("\t Para visualizar todos los libros de una categoria ./P6_GestionBiblioteca_RubenGuillenRojas categoria [0 -> FICTION, 1 -> NON_FICTION, 2 -> POETRY, 3 -> THEATER, 4 -> ESSAY]\n");
-    printf("\t Para visualizar un libro por autor ./P6_GestionBiblioteca_RubenGuillenRojas autor [nombre del autor]\n");
-    printf("\t Para añadir un libro a la biblioteca ./P6_GestionBiblioteca_RubenGuillenRojas añadir\n\n");
-
-
-// Verifica que se haya pasado al menos un argumento al programa
-if (argc < 2) {
-    printf("Comando no reconocido.\n");
-    return 1;
-}
-
-// Comando "mostrar"
-if (strcmp(argv[1], "mostrar") == 0) {
-    // Si solo hay dos argumentos, muestra todos los libros
-    if (argc == 2) { 
-        mostrarTodosLosLibros(biblioteca, totalLibros); 
-    }
-    // Si hay tres argumentos, muestra un libro específico por ID
-    else if (argc == 3) { 
-        int id = atoi(argv[2]); // Convierte el tercer argumento a entero
-        mostrarLibro(biblioteca, totalLibros, id);
-    } 
-    // Si el numero de argumentos no es valido
-    else { 
-        printf("Comando no reconocido.\n");
-    }
-}
-
-// Comando "stock"
-else if (strcmp(argv[1], "stock") == 0) {
-    // Si hay cuatro argumentos, actualiza el stock de un libro
-    if (argc == 4) { 
-        int id = atoi(argv[2]); // Convierte el segundo argumento a entero (ID)
-        int cantidad = atoi(argv[3]); // Convierte el tercer argumento a entero (cantidad)
-        añadirCantidadLibro(biblioteca, totalLibros, id, cantidad);
-    } 
-    // Si el numero de argumentos no es valido
-    else { 
-        printf("Comando no reconocido.\n");
-    }
-}
-
-// Comando "categoria"
-else if (strcmp(argv[1], "categoria") == 0) {
-    // Si hay tres argumentos, muestra los libros de una categoría específica
-    if (argc == 3) { 
-        int categoria = atoi(argv[2]); // Convierte el segundo argumento a entero (categoria)
-        mostrarLibrosPorCategoria(biblioteca, totalLibros, categoria);
-    } 
-    // Si el numero de argumentos no es valido
-    else { 
-        printf("Comando no reconocido.\n");
-    }
-}
-
-// Comando "autor"
-else if (strcmp(argv[1], "autor") == 0) {
-    // Si hay tres argumentos, muestra los libros de un autor especifico
-    if (argc == 3) { 
-        const char *nombreAutor = argv[2]; // Toma el nombre del autor directamente como cadena
-        mostrarAutor(biblioteca, totalLibros, nombreAutor);
-    } 
-    // Si el numero de argumentos no es valido
-    else { 
-        printf("Comando no reconocido.\n");
-    }
-}
-
-// Comando "añadir"
-else if (strcmp(argv[1], "añadir") == 0) {
-    // Añade un nuevo libro a la biblioteca
-    añadirNuevoLibro(&biblioteca, &totalLibros);
-}
-
-// Si el comando no coincide con ninguno de los anteriores
-else {
-    printf("Comando no reconocido.\n");
-}
-
-
-// Liberamos la memoria al finalizar
-free(biblioteca);
-return 0;
-
 }
