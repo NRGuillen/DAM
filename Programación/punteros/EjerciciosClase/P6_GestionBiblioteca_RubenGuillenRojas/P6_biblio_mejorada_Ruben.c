@@ -330,7 +330,6 @@ void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
 
         nuevoLibro.ID = (*totalLibros) + 1; //Aumenta el numero del ID, es decir si hay 40 libros + 1, el siguiente es el 41 y asi ninguno se repite.
 
-        
         *biblioteca = (Libro *)realloc(*biblioteca, (*totalLibros + 1) * sizeof(Libro));
         if (*biblioteca == NULL) { // Se ejecuta si no hay suficiente memoria diponible, o realloc no ha podido asignar la nueva memoria
         /*
@@ -354,7 +353,17 @@ void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
         }
 
         
-        (*biblioteca)[*totalLibros] = nuevoLibro;
+        memcpy(&((*biblioteca)[*totalLibros]), &nuevoLibro, sizeof(Libro));
+
+        /*
+
+        *biblioteca, es un puntero que apunta a todos los libros de la memoria
+        *totalLibros, es el array que recorre cada libro en la memoria
+        &nuevoLibro es el libro, que introduce el usuario, el & es para acceder/leer a la informacion de la memoria
+        sizeof(libro), es el tamaño que el nuevoLibro va a poder tener
+
+        */
+        
         /*
 
                                                                 ############################
