@@ -27,9 +27,11 @@ typedef struct {
                                                                 ############################
                                                                 #########IMPORTANTE#########
                                                                 ############################
+
                                                         ¿Porque Categoria no se pone dentro del tydef?
 
-        Categoria define un cojunto de valores constantes, en este caso las categorias, no van a cambiar siempre seran  FICTION NON_FICTION POETRY THEATER ESSAY
+        Categoria esta definiendo un cojunto de valores constantes, en este caso las categorias, no van a cambiar siempre seran  FICTION NON_FICTION 
+        POETRY THEATER ESSAY.
         El typdef Categoria es independiente a Libro, por lo que se puede reutilizar en partes diferentes del probrama.
         Si lo ponemos dentro de Libro limitariamos su uso y no seria eficiente para utilizarlo en otras lineas del programa.
  
@@ -140,7 +142,7 @@ int main(int argc, char*argv[]) {
 
 // Verifica que se haya pasado al menos un argumento al programa
 if (argc < 2) {
-    printf("Comando no reconocido.\n");
+    printf("Has introducido un comando erroneo.\n");
     return 1;
 }
 
@@ -150,14 +152,14 @@ if (strcmp(argv[1], "mostrar") == 0) {
     if (argc == 2) { 
         mostrarTodosLosLibros(biblioteca, totalLibros); 
     }
-    // Si hay tres argumentos, muestra un libro específico por ID
+    // Si hay tres argumentos, muestra un libro especifico por ID
     else if (argc == 3) { 
         int id = atoi(argv[2]); // Convierte el tercer argumento a entero
         mostrarLibro(biblioteca, totalLibros, id);
     } 
     // Si el numero de argumentos no es valido
     else { 
-        printf("Comando no reconocido.\n");
+        printf("Has introducido un comando erroneo.\n");
     }
 }
 
@@ -171,7 +173,7 @@ else if (strcmp(argv[1], "stock") == 0) {
     } 
     // Si el numero de argumentos no es valido
     else { 
-        printf("Comando no reconocido.\n");
+        printf("Has introducido un comando erroneo.\n");
     }
 }
 
@@ -184,7 +186,7 @@ else if (strcmp(argv[1], "categoria") == 0) {
     } 
     // Si el numero de argumentos no es valido
     else { 
-        printf("Comando no reconocido.\n");
+        printf("Has introducido un comando erroneo.\n");
     }
 }
 
@@ -197,7 +199,7 @@ else if (strcmp(argv[1], "autor") == 0) {
     } 
     // Si el numero de argumentos no es valido
     else { 
-        printf("Comando no reconocido.\n");
+        printf("Has introducido un comando erroneo.\n");
     }
 }
 
@@ -209,7 +211,7 @@ else if (strcmp(argv[1], "añadir") == 0) {
 
 // Si el comando no coincide con ninguno de los anteriores
 else {
-    printf("Comando no reconocido.\n");
+    printf("Has introducido un comando erroneo.\n");
 }
 
 
@@ -380,6 +382,8 @@ void mostrarLibrosPorCategoria(Libro *biblioteca, int totalLibros, Categoria cat
 
 void mostrarAutor(Libro *biblioteca, int totalLibros, const char *nombreAutor) {
 
+int encontrado = 0; // Variable para saber si esta el autor que el usuario introduce 
+
 /*
 
 Libro *biblioteca, biblioteca apunta a la memoria donde esta almacenado el struct de Libro.
@@ -434,15 +438,22 @@ Libro *biblioteca, biblioteca apunta a la memoria donde esta almacenado el struc
 
             biblioteca[i].autor contiene un char con el nombre del autor, cada vez que el bucle for incrementa la i, va pasando por todos los autores
             nombreAutor contiene el nombre del autor que el usuario introduce (const char *nombreAutor = argv[2];)
-            strlen() calcula la longitud de la cadena nombreAutor. Es decir, devuelve el numero de caracteres que tiene el nombre del autor que el 
-            usuario esta buscando, el \0 no cuenta.
-            strncmp() cuenta los caracteres de nombreAutor, es decir cuenta el nombre del autor que el usuario busca.
+            strlen() cuenta la longitud de la cadena nombreAutor. Es decir, devuelve el numero de caracteres que tiene el nombre del autor que el 
+            usuario esta buscando, el \0 no cuenta
+            strncmp() compara las primeras letras de "nombreAutor" con la cadena que el usuario busca
+            
+            ###########
+            ##EJEMPLO##
+            ###########
+            
+            Si introduce  "Harper Lee", la comparacion se hace con los primeros caracteres de "nombreAutor" y la cadena ingresada. Si coinciden devuelve 0, 
+            si no coincide devuelve un valor diferente de 0
 
             ###########
             ##EJEMPLO##
             ###########
 
-            strncmp() cuenta los caracteres de nombreAutor, es decir cuenta el nombre del autor que el usuario busca.
+            strlen() cuenta los caracteres de nombreAutor, es decir cuenta el nombre del autor que el usuario busca.
 
             Si el usuario busca Harper Lee, delvolvera 10 
 
@@ -464,7 +475,11 @@ Libro *biblioteca, biblioteca apunta a la memoria donde esta almacenado el struc
             // i -> indice (i del bucle for)
         }
     }
-
+    
+    // Si no hemos encontrado ningun libro del autor, mostramos un mensaje
+    if (!encontrado) {
+        printf("No existe ningun libro con el nombre %s en esta biblioteca.\n", nombreAutor);
+    }
 }
 
 void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
@@ -532,14 +547,20 @@ void añadirNuevoLibro(Libro **biblioteca, int *totalLibros) {
         }
 
         
-        memcpy(&((*biblioteca)[*totalLibros]), &nuevoLibro, sizeof(Libro));
+        memcpy(&((*biblioteca)[*totalLibros]), &nuevoLibro, sizeof(Libro));//Sirve para copiar un bloque de memoria de un lugar a otro
 
         /*
+                                                        --------------------------------------------------
+                                                        |################################################|
+                                                        |#################MUY IMPORTANTE#################|
+                                                        |################################################|
+                                                        --------------------------------------------------
 
-        *biblioteca, es un puntero que apunta a todos los libros de la memoria
-        *totalLibros, es el array que recorre cada libro en la memoria
-        &nuevoLibro es el libro, que introduce el usuario, el & es para acceder/leer a la informacion de la memoria
-        sizeof(libro), es el tamaño que el nuevoLibro va a poder tener
+        &nuevoLibro es la direccion de memoria del nuevo libro que se va a añadir, es decir un puntero que contiene los datos que el usuario ingresa
+        &((*biblioteca)[*totalLibros]) es el lugar donde se va a añadir el libro nuevo
+            (*biblioteca) es el puntero de la biblioteca
+            [*totalLibros] es el indice de los libros almacenados en la biblioteca y donde se añadira el nuevo
+        sizeof(Libro), es el tamaño que el nuevoLibro va a poder tener, es decir el struct de Libro
 
         */
         
