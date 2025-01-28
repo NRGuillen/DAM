@@ -33,7 +33,8 @@ int main(){
 
 	for (int i = 0; i < numero; ++i){
 
-	arr[i] = i / numero; //	arr[i] = (float)i / numero;
+	//arr[i] = i / numero; 	
+	arr[i] = (float)i / numero;
 
 	printf("Posicion %d: %d/%d = %.1f en la posicion de memoria %p\n", i, i, numero, arr[i], &arr[i]);
 
@@ -43,7 +44,8 @@ int main(){
 
 	for (int i = 0; i < numero / 2; ++i){
 
-	arr[i] = i / numero; //	arr[i] = (float)i / numero;
+	//arr[i] = i / numero;	
+	arr[i] = (float)i / numero;
 
 	printf("Posicion %d: %d/%d = %.1f en la posicion de memoria %p\n", i, i, numero, arr[i], &arr[i]);
 
