@@ -20,7 +20,7 @@ int main(){
 		
 
 
-	float * arrNumeroMitad = (float*)malloc(10 * sizeof(arrNumero) /2);
+	float * arrNumeroMitad = (float*)malloc(10 * sizeof(numero) /2);
 
 	printf("\n\nPARTE DEL ARRAY REDUCIDO\n");
 
