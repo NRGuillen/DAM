@@ -1,2 +1,3 @@
+      1 Línea única 
      15 Línea repetida
-      1 Línea única
+      
