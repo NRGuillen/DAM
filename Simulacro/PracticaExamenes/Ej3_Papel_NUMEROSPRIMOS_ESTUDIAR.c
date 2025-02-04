@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Función para verificar si un número es primo
 int es_primo(int num) {
     if (num <= 1) return 0;  // No es primo
     for (int i = 2; i * i <= num; i++) {
@@ -13,7 +12,6 @@ int es_primo(int num) {
 int main() {
     int n;
 
-    // Solicitar el tamaño del array
     printf("Ingrese un número entero positivo: ");
     scanf("%d", &n);
     if(n <= 0){
@@ -21,17 +19,14 @@ int main() {
         return 1;
     }
 
-    // Reservar memoria dinámica para el array
     int *array = malloc(n * sizeof(int));
 
-    // Verificar si la memoria fue reservada correctamente
     if (array == NULL) {
         printf("Error al reservar memoria.\n");
-        return 1; // Terminar si no se pudo reservar memoria
+        return 1; 
     }
 
-    // Llenar el array con los primeros n números primos
-    int num = 2; // El primer número primo es 2
+    int num = 2; 
     for (int i = 0; i < n; ) {
         if (es_primo(num)) {
             array[i++] = num;
@@ -39,14 +34,12 @@ int main() {
         num++;
     }
 
-    // Mostrar los números primos
     printf("Los primeros %d números primos son:\n", n);
     for (int i = 0; i < n; i++) {
         printf("%d ", array[i]);
     }
     printf("\n");
 
-    // Liberar la memoria reservada
     free(array);
 
     return 0;

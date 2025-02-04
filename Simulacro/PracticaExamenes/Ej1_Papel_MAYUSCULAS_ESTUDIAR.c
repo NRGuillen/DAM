@@ -3,7 +3,7 @@
 
 // Función para capitalizar un carácter
 char capitalizar(char letra_minuscula) {
-    letra_minuscula = letra_minuscula + 'A' - 'a';  
+    letra_minuscula = letra_minuscula + 'Z' - 'z';  
     
     return letra_minuscula;
 }
@@ -38,3 +38,22 @@ int main() {
 
     return 0;
 }
+
+/*
+¿Los cambios que realiza la función capitalizar son persistentes al terminar la función?
+
+Sí, los cambios son persistentes en memoria. La razón de esto es que la función capitalizar modifica directamente 
+el contenido de la memoria a la que apunta el puntero letra_minuscula, que fue pasado a la función desde el main. 
+Los punteros en C se pasan por referencia, lo que significa que cualquier cambio realizado sobre el puntero en la 
+función afectará directamente a los datos en memoria, que son los caracteres de la palabra introducida por el usuario.
+
+En el caso del código, la palabra se pasa por el puntero letra_minuscula y, cuando la función capitalizar cambia 
+la letra, esta modificación es realizada sobre los caracteres que están en la memoria asignada para la palabra, por lo que es persistente.
+
+¿Qué ocurre si se introduce una palabra de más longitud de la reservada?
+
+Si el usuario introduce una palabra que tiene una longitud mayor a la memoria reservada por malloc, se provocará un desbordamiento 
+de buffer (buffer overflow). Esto ocurre porque el scanf no controla los límites del buffer y se seguirá escribiendo en memoria más 
+allá del espacio reservado para la palabra, lo que puede sobrescribir otras variables o incluso partes del programa, provocando un 
+comportamiento inesperado o errores de memoria.
+*/
