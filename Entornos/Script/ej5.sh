@@ -1,12 +1,9 @@
 #!/bin/bash
 
-for archivo in test5/
 
-	do
-		if [["$file" == "*.jpg"]] then
+for archivo in *.jpg
+	
+do
+  mv "$archivo" "${archivo%.jpg}.old"
+done
 
-			$rename 's/.jpg$/.old/' *
-
-		fi
-
-	done
