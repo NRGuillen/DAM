@@ -1,0 +1,26 @@
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0  21500 12924 ?        Ss   17:42   0:00 /usr/lib/systemd/systemd --system --deserialize=76
+root           2  0.0  0.0   2776  1924 ?        Sl   17:42   0:00 /init
+root           7  0.0  0.0   3092   316 ?        Sl   17:42   0:04 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+root          52  0.0  0.1  66828 18068 ?        S<s  17:42   0:00 /usr/lib/systemd/systemd-journald
+root          92  0.0  0.0  23992  6132 ?        Ss   17:42   0:00 /usr/lib/systemd/systemd-udevd
+systemd+     141  0.0  0.0  21452 11968 ?        Ss   17:42   0:00 /usr/lib/systemd/systemd-resolved
+systemd+     142  0.0  0.0  91020  6528 ?        Ssl  17:42   0:00 /usr/lib/systemd/systemd-timesyncd
+root         151  0.0  0.0   4236  2700 ?        Ss   17:42   0:00 /usr/sbin/cron -f -P
+message+     152  0.0  0.0   9660  5248 ?        Ss   17:42   0:00 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root         159  0.0  0.0  17976  8224 ?        Ss   17:42   0:00 /usr/lib/systemd/systemd-logind
+root         162  0.0  0.1 1756096 20056 ?       Ssl  17:42   0:00 /usr/libexec/wsl-pro-service -vv
+root         167  0.0  0.0   3160  1148 hvc0     Ss+  17:42   0:00 /sbin/agetty -o -p -- \u --noclear --keep-baud - 115200,38400,9600 vt220
+root         171  0.0  0.0   3116  1232 tty1     Ss+  17:42   0:00 /sbin/agetty -o -p -- \u --noclear - linux
+syslog       172  0.0  0.0 222508  7212 ?        Ssl  17:42   0:00 /usr/sbin/rsyslogd -n -iNONE
+root         187  0.0  0.1 107012 22276 ?        Ssl  17:42   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root         283  0.0  0.0   2784   208 ?        Ss   17:42   0:00 /init
+root         284  0.0  0.0   2784   212 ?        S    17:42   0:00 /init
+ruben        285  0.0  0.0   6336  5708 pts/0    Ss   17:42   0:00 -bash
+root         286  0.0  0.0   6820  4628 pts/1    Ss   17:42   0:00 /bin/login -f
+ruben        378  0.0  0.0  20260 11528 ?        Ss   17:42   0:00 /usr/lib/systemd/systemd --user
+ruben        379  0.0  0.0  21148  1728 ?        S    17:42   0:00 (sd-pam)
+ruben        394  0.0  0.0   6072  5024 pts/1    S+   17:42   0:00 -bash
+polkitd     3085  0.0  0.0 308160  9996 ?        Ssl  18:36   0:00 /usr/lib/polkit-1/polkitd --no-debug
+ruben       5464  0.0  0.0   4752  3372 pts/0    S+   23:44   0:00 /bin/bash ./ej10.sh
+ruben       5465  0.0  0.0   8280  4220 pts/0    R+   23:44   0:00 ps aux
