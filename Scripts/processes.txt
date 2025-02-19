@@ -24,3 +24,31 @@ ruben        394  0.0  0.0   6072  5024 pts/1    S+   17:42   0:00 -bash
 polkitd     3085  0.0  0.0 308160  9996 ?        Ssl  18:36   0:00 /usr/lib/polkit-1/polkitd --no-debug
 ruben       5464  0.0  0.0   4752  3372 pts/0    S+   23:44   0:00 /bin/bash ./ej10.sh
 ruben       5465  0.0  0.0   8280  4220 pts/0    R+   23:44   0:00 ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  2.1  0.0  21540 12812 ?        Ss   10:50   0:00 /sbin/init
+root           2  0.0  0.0   2776  1924 ?        Sl   10:50   0:00 /init
+root           7  0.0  0.0   2924   140 ?        Sl   10:50   0:00 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+root          52  0.6  0.1  42100 16176 ?        S<s  10:50   0:00 /usr/lib/systemd/systemd-journald
+root          94  0.5  0.0  23988  5996 ?        Ss   10:50   0:00 /usr/lib/systemd/systemd-udevd
+systemd+     141  0.4  0.0  21452 11696 ?        Ss   10:50   0:00 /usr/lib/systemd/systemd-resolved
+systemd+     142  0.3  0.0  91020  6460 ?        Ssl  10:50   0:00 /usr/lib/systemd/systemd-timesyncd
+root         151  0.0  0.0   4236  2648 ?        Ss   10:50   0:00 /usr/sbin/cron -f -P
+message+     152  0.1  0.0   9536  5084 ?        Ss   10:50   0:00 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root         162  0.4  0.0  17976  8164 ?        Ss   10:50   0:00 /usr/lib/systemd/systemd-logind
+root         166  0.4  0.0 1756096 15952 ?       Ssl  10:50   0:00 /usr/libexec/wsl-pro-service -vv
+root         173  0.0  0.0   3160  1188 hvc0     Ss+  10:50   0:00 /sbin/agetty -o -p -- \u --noclear --keep-baud - 115200,38400,9600 vt220
+root         178  0.0  0.0   3116  1104 tty1     Ss+  10:50   0:00 /sbin/agetty -o -p -- \u --noclear - linux
+syslog       179  0.2  0.0 222508  7284 ?        Ssl  10:50   0:00 /usr/sbin/rsyslogd -n -iNONE
+root         201  0.4  0.1 107012 22428 ?        Ssl  10:50   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root         257  0.3  0.0  17276  6620 ?        Ss   10:50   0:00 /usr/lib/systemd/systemd-timedated
+root         301  0.0  0.0   2784   208 ?        Ss   10:50   0:00 /init
+root         302  0.0  0.0   2784   212 ?        S    10:50   0:00 /init
+ruben        303  0.1  0.0   6336  5504 pts/0    Ss   10:50   0:00 -bash
+root         304  0.0  0.0   6820  4560 pts/1    Ss   10:50   0:00 /bin/login -f
+ruben        396  0.5  0.0  20264 11400 ?        Ss   10:50   0:00 /usr/lib/systemd/systemd --user
+ruben        397  0.0  0.0  21148  1728 ?        S    10:50   0:00 (sd-pam)
+ruben        410  0.0  0.0   6072  5048 pts/1    S+   10:50   0:00 -bash
+root         460  0.0  0.0  23992  3220 ?        S    10:51   0:00 (udev-worker)
+root         461  0.0  0.0  23992  3220 ?        S    10:51   0:00 (udev-worker)
+ruben        467  0.0  0.0   4752  3212 pts/0    S+   10:51   0:00 /bin/bash ./ej10.sh
+ruben        468  0.0  0.0   8280  4116 pts/0    R+   10:51   0:00 ps aux
