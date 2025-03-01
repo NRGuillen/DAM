@@ -189,7 +189,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     mostrarDragon(&nuevoDragon);
 }
 
- void inicializarCazadores(Cazador ** cazadores, int *totalCazadores){
+void inicializarCazadores(Cazador ** cazadores, int *totalCazadores){
     
     *cazadores = (Cazador*) malloc (*totalCazadores * sizeof(Cazador));
     if (*cazadores == NULL){
@@ -197,9 +197,10 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
         exit(EXIT_SUCCESS);} //Salimos con código de error.
 
     inicializarCazador(&(*cazadores)[0], 1, "Mushashi", "Iaido", 20, 120, 100, "Un caballero audaz y letal, cuya fuerza arrolladora destruye cualquier defensa. Ataca con velocidad y precisión, sin dar tregua a sus enemigos.");
-    inicializarCazador(&(*cazadores)[1], 2, "Conan", "Atlantean", 15, 150, 100, "Un caballero imponente y resistente, cuya armadura absorbe cualquier golpe. Avanza sin miedo, protegiendo a sus aliados con su inquebrantable defensa.");
-    inicializarCazador(&(*cazadores)[2], 3, "Sauron", "Narsil", 10, 90, 100, "Un sabio y compasivo curandero, cuyo poder restaura heridas y protege a sus aliados. Su magia divina es un faro de esperanza en la batalla.");
- }
+    inicializarCazador(&(*cazadores)[1], 2, "Conan", "Atlantean", 15, 150, 100, "Un caballero audaz y letal, cuya fuerza arrolladora destruye cualquier defensa. Ataca con velocidad y precisión, sin dar tregua a sus enemigos.");
+    inicializarCazador(&(*cazadores)[2], 3, "Jeremias", "Yari", 10, 200, 100, "Un caballero audaz y letal, cuya fuerza arrolladora destruye cualquier defensa. Ataca con velocidad y precisión, sin dar tregua a sus enemigos.");
+    *totalCazadores = 3; // Total de cazadores
+}
 
 
 void inicializarDragon(Dragon *dragon, int id,  char *nombre, int vida, int daño, int resistencia,  char *pasiva,  char *descripcion, int oro) {
@@ -285,25 +286,26 @@ void seleccionarDragon(Dragon *dragones, int totalDragones) {
 }
 
 // En cazadores.c o juego.c (solo en uno)
-void inicializarCazador(Cazador *datos, int ID, const char *nombre, const char *arma, int ataque, int vida, int oro, const char *descripcion) {
+void inicializarCazador(Cazador *datos, int ID, const char *nombre, const char *arma, int ataque, int vida, int oro, const char *descripcion){
     datos->ID = ID;
-    strncpy(datos->nombre, nombre, MAXNOMBRE);
-    strncpy(datos->arma, arma, MAXARMA);
+    strcpy(datos->nombre, nombre);
+    strcpy(datos->arma, arma);
     datos->ataque = ataque;
     datos->vida = vida;
     datos->oro = oro;
-    strncpy(datos->descripcion, descripcion, MAXDESCRPCION);
-    datos->descripcion[MAXDESCRPCION] = '\0';  // Asegurar terminación segura
+    strcpy(datos->descripcion, descripcion);
 }
 
 
 //VISUALIZAR CAZADOR
-void cazadorIMPRIMIR(const Cazador *cazador) {
-    printf("\n" AMARILLO "Nombre: %s" SC, cazador->nombre);
-    printf("\n" AMARILLO "Arma: %s" SC, cazador->arma);
-    printf("\n" AMARILLO "Ataque: %d" SC, cazador->ataque);
-    printf("\n" AMARILLO "Vida: %d" SC, cazador->vida);
-    printf("\n" AMARILLO "Descripción: %s\n" SC, cazador->descripcion);
+void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir){
+    printf(NARANJA"\nID: %d\n", cazador_a_imprimir->ID);
+    printf("\nNombre: %s\n", cazador_a_imprimir->nombre);
+    printf("\nArma: %s\n", cazador_a_imprimir->arma);
+    printf("\nAtaque: %d\n", cazador_a_imprimir->ataque);
+    printf("\nVida: %d\n", cazador_a_imprimir->vida);
+    printf("\nOro: %d\n", cazador_a_imprimir->oro);
+    printf("\nDescripción: %s\n", cazador_a_imprimir->descripcion);
 }
 
 void cazadorSELEC(Cazador *cazadores, int totalCazadores) {
@@ -455,14 +457,13 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
         }
     } while (intentos > 0);
 
-    // **Asigna memoria para el nuevo cazador**
-    Cazador *temp = realloc(*cazadores, (*totalCazadores + 1) * sizeof(Cazador));
-    if (temp == NULL) {
-        printf(ROJO "ERROR CATASTRÓFICO. No se pudo asignar memoria.\n" SC);
-        free(*cazadores);
+    Cazador *REALLOC_TEMP = (Cazador*) realloc(*cazadores, (*totalCazadores + 1) * sizeof(Cazador));
+    if (REALLOC_TEMP == NULL) {
+        printf("ERROR: No se pudo asignar memoria para el nuevo cazador.\n");
         exit(EXIT_FAILURE);
     }
-    *cazadores = temp;
+    *cazadores = REALLOC_TEMP;  // Solo si realloc fue exitoso
+
 
     // **Añadir el nuevo cazador al array**
     (*cazadores)[*totalCazadores] = nuevoCazador;
