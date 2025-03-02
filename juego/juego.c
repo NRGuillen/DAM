@@ -39,7 +39,7 @@
 #define LAVANDA   "\033[38;2;230;230;250m"
 #define SALMON    "\033[38;2;250;128;114m"
 #define CHOCOLATE "\033[38;2;210;105;30m"
-#define CURSIVA "\033[3m"
+#define CURSIVA   "\033[3m"
 
 // Reset (para volver al color original)
 #define SC        "\033[0m"
@@ -56,7 +56,7 @@ typedef struct {
 } Dragon;
 
 
-typedef struct{
+typedef struct {
     int ID;
     char nombre[MAXNOMBRE + 1];
     char arma[MAXARMA + 1];
@@ -71,13 +71,14 @@ void comenzarBatalla(Cazador *cazador, Dragon *dragon);
 void inicializarCazador(Cazador *datos, int ID, const char *nombre, const char *arma, int ataque, int vida, int oro, const char *descripcion);
 void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir);
 void inicializarCazadores(Cazador **cazadores, int *totalCazadores);
-void cazadorSELEC(Cazador *cazadores, int totalCazadores);
+Cazador* cazadorSELEC(Cazador *cazadores, int totalCazadores);
 void añadirCazador(Cazador **cazadores, int *totalCazadores);
 void inicializarDragon(Dragon *dragon, int id, char *nombre, int vida, int ataque, int resistencia, char *pasiva, char *descripcion, int oro);
 void mostrarDragon(Dragon *dragon);
-void visualizarDragones(Dragon **dragones, int *totalDragones); // Actualizado
+Dragon* seleccionarDragon(Dragon *dragones, int totalDragones); 
+Dragon* visualizarDragones(Dragon **dragones, int *totalDragones); 
 void añadir_dragon(Dragon **dragones, int *totalDragones);
-void seleccionarDragon(Dragon *dragones, int totalDragones);
+Cazador* MENU(Cazador **cazadores, int *totalCazadores);
 
 void añadir_dragon(Dragon **dragones, int *totalDragones) {
     Dragon nuevoDragon;
@@ -228,7 +229,7 @@ void mostrarDragon(Dragon *dragon) {
     printf(ROJO"\tRecompensa:"SC" %d de oro\n\n", dragon->oro);
 }
 
-void visualizarDragones(Dragon **dragones, int *totalDragones) {
+Dragon* visualizarDragones(Dragon **dragones, int *totalDragones) {
     *totalDragones = 3;
     *dragones = (Dragon*)malloc(3 * sizeof(Dragon));
     if (*dragones == NULL) {
@@ -241,47 +242,49 @@ void visualizarDragones(Dragon **dragones, int *totalDragones) {
     inicializarDragon(&(*dragones)[2], 3, "Velkhanos", 100, 10, 15, "Se curará un 5%...", "Velkhanos es un dragón histórico...", 200);
 
     printf(NARANJA"\nDRAGONES DISPONIBLES:\n"SC);
-    for (int i = 0; i < *totalDragones; i++) {
-        mostrarDragon(&(*dragones)[i]);
-    }
+    system("chafa -f symbols -s 50x30 Nightmare.jpg"); 
+    mostrarDragon(&(*dragones)[0]);  // Corregido
+    system("chafa -f symbols -s 50x30 Cryonyx.jpg");
+    mostrarDragon(&(*dragones)[1]);  // Corregido
+    system("chafa -f symbols -s 50x30 Velkhanos.jpg");
+    mostrarDragon(&(*dragones)[2]);  // Corregido
 
-    seleccionarDragon(*dragones, *totalDragones);
+    return seleccionarDragon(*dragones, *totalDragones); // Devolvemos el dragón seleccionado
 }
 
-void seleccionarDragon(Dragon *dragones, int totalDragones) {
+Dragon* seleccionarDragon(Dragon *dragones, int totalDragones) {
     int seleccion;
     int valido = 0;
 
     do {
-        printf(NARANJA"Introduzca el ID del dragon con el que va a jugar: ");
+        printf(NARANJA"Introduzca el ID del dragón con el que va a jugar: "SC);
         scanf("%d", &seleccion);
+        while (getchar() != '\n'); // Limpiar buffer
 
         if (seleccion >= 1 && seleccion <= totalDragones) {
-            switch(seleccion) {
+            switch (seleccion) {
                 case 1:
-                    printf("\n\nDragon seleccionado: %d\n", seleccion);
-                    printf("\n");
+                    printf("\n\nDragón seleccionado: %d\n", seleccion);
                     system("chafa -f symbols -s 50x30 Nightmare.jpg");
                     break;
                 case 2:
-                    printf("\n\nDragon seleccionado: %d\n", seleccion);
-                    printf("\n");
+                    printf("\n\nDragón seleccionado: %d\n", seleccion);
                     system("chafa -f symbols -s 50x30 Cryonyx.jpg");
                     break;
                 case 3:
-                    printf("\n\nDragon seleccionado: %d\n", seleccion);
-                    printf("\n");
+                    printf("\n\nDragón seleccionado: %d\n", seleccion);
                     system("chafa -f symbols -s 50x30 Velkhanos.jpg");
                     break;
             }
-
             mostrarDragon(&dragones[seleccion - 1]);
-
             valido = 1;
+            return &dragones[seleccion - 1]; // Devolvemos el dragón seleccionado
         } else {
             printf(ROJO"Has introducido un dragón que no existe.\n\n"SC);
         }
     } while (!valido);
+
+    return NULL; // Nunca debería llegar aquí
 }
 
 // En cazadores.c o juego.c (solo en uno)
@@ -311,50 +314,48 @@ void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir){
     printf("\nDescripción: %s\n", cazador_a_imprimir->descripcion);
 }
 
- void cazadorSELEC(Cazador *cazadores, int totalCazadores){
-        int intentos = 3;
-
-        printf(NARANJA"\nCAZADORES DISPONIBLES: \n" SC);
-
-        system("chafa -f symbols -s 50x30 Mushashi.jpg"); //PARA USAR CHAFA, EL USUARIO HA DE DESCARGARSE "sudo apt install chafa"
-        cazadorIMPRIMIR(&cazadores[0]);
-        system("chafa -f symbols -s 50x30 Conan.jpg");
-        cazadorIMPRIMIR(&cazadores[1]);
-        system("chafa -f symbols -s 50x30 Sauron.jpg");
-        cazadorIMPRIMIR(&cazadores[2]);
-
+ Cazador* cazadorSELEC(Cazador *cazadores, int totalCazadores) {
+    int intentos = 3;
     int cazadorACTIVO;
-        do {
-            printf(NARANJA"\n\nIntroduzca el ID del cazador con el que va a jugar: "SC);
-    
-            if (scanf("%d", &cazadorACTIVO) != 1) {
-                printf(ROJO"Entrada inválida. Debe ingresar un  número.\n"SC);  
-                while (getchar() != '\n');
-                intentos--;
-            } 
-    
-            else if (cazadorACTIVO < 1 || cazadorACTIVO  > totalCazadores){
-                printf(ROJO"El ID del primer cazador es 1 y el último es %d.\n" SC, totalCazadores);
-                intentos--;
-            } 
 
-            else {
-                if(cazadorACTIVO == 1){
-                    system("chafa -f symbols -s 50x30 Mushashi.jpg");}
-                else if(cazadorACTIVO == 2){
-                    system("chafa -f symbols -s 50x30 Conan.jpg");}
-                else if(cazadorACTIVO == 3){
-                    system("chafa -f symbols -s 50x30 Sauron.jpg");}
-                  cazadorIMPRIMIR(&cazadores[cazadorACTIVO-1]);
-                  break;}
-    
-            if (intentos == 0){
-                    printf(ROJO"INTENTOS AGOTADOS. MÁS SUERTE LA PRÓXIMA VEZ.\n"SC);
-                    exit(EXIT_FAILURE);}
-    
-            } while (intentos > 0);
+    printf(NARANJA"\nCAZADORES DISPONIBLES: \n"SC);
 
-    }
+    system("chafa -f symbols -s 50x30 Mushashi.jpg");
+    cazadorIMPRIMIR(&cazadores[0]);
+    system("chafa -f symbols -s 50x30 Conan.jpg");
+    cazadorIMPRIMIR(&cazadores[1]);
+    system("chafa -f symbols -s 50x30 Sauron.jpg");
+    cazadorIMPRIMIR(&cazadores[2]);
+
+    do {
+        printf(NARANJA"\n\nIntroduzca el ID del cazador con el que va a jugar: "SC);
+        if (scanf("%d", &cazadorACTIVO) != 1) {
+            printf(ROJO"Entrada inválida. Debe ingresar un número.\n"SC);
+            while (getchar() != '\n');
+            intentos--;
+        } else if (cazadorACTIVO < 1 || cazadorACTIVO > totalCazadores) {
+            printf(ROJO"El ID del primer cazador es 1 y el último es %d.\n"SC, totalCazadores);
+            intentos--;
+        } else {
+            if (cazadorACTIVO == 1) {
+                system("chafa -f symbols -s 50x30 Mushashi.jpg");
+            } else if (cazadorACTIVO == 2) {
+                system("chafa -f symbols -s 50x30 Conan.jpg");
+            } else if (cazadorACTIVO == 3) {
+                system("chafa -f symbols -s 50x30 Sauron.jpg");
+            }
+            cazadorIMPRIMIR(&cazadores[cazadorACTIVO - 1]);
+            return &cazadores[cazadorACTIVO - 1]; // Devolvemos el cazador seleccionado
+        }
+
+        if (intentos == 0) {
+            printf(ROJO"INTENTOS AGOTADOS. MÁS SUERTE LA PRÓXIMA VEZ.\n"SC);
+            exit(EXIT_FAILURE);
+        }
+    } while (intentos > 0);
+
+    return NULL; // Nunca debería llegar aquí, pero por seguridad
+}
 
 //AÑADIR CAZADORES
 void añadirCazador(Cazador **cazadores, int *totalCazadores) {
@@ -497,7 +498,7 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
 }
 
 
- void BIENVENIDA(){
+void BIENVENIDA() {
     system("clear");
     system("chafa -f symbols -s 90x50 Erebor.jpg");
     printf(CURSIVA"Tras la caída del gran dragón codicioso, los cielos sobre la Montaña Solitaria permanecieron en silencio por generaciones. Sin embargo, los ecos de su avaricia no desaparecieron tras su muerte a manos de Bardo. Los hijos del monstruo, nacidos en las sombras de su padre, regresan ahora, decididos a reclamar lo que consideran suyo: el oro que una vez perteneció al rey enano Thráin II.\n"
@@ -505,46 +506,46 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
         "\nEl tesoro, una vez custodiado por un solo ser, ahora se ve protegido por una legión de dragones con la misma insaciable hambre que su antecesor. La Montaña, que guardó el silencio por tanto tiempo, vuelve a rugir con la furia de aquellos que ansían lo que no les pertenece.\n"
 
         "\nLos cazadores, sabiendo que esta vez el desafío es aún mayor, se preparan para enfrentar a una fuerza más peligrosa que cualquier que hayan conocido. No luchan solo por el oro, sino por evitar que la sombra de la codicia del dragón se apodere nuevamente de la tierra.\n\n"SC);
-    }
+}
 
-//MENÚ
-int totalCazadores;
 
- void MENU(){
-    Cazador *cazadores = NULL;//Tenemos que inicializar el puntero donde vamos a guradar a los cazadores en el main, como todavía no tiene 'nada', lo inicializamos en nulo.
-    inicializarCazadores(&cazadores, &totalCazadores);
-
-    int opcion;
-
-    printf(MAGENTA"\t MENÚ: \n"
-            AZUL_C"\t 1) Seleccionar un cazador.\n"
-                  "\t 2) Añadir cazador.\n"
-                  "\t 3) Salir.\n"SC
-           MAGENTA"\t OPCIÓN: "SC);
-    scanf("%d", &opcion);
-
-    switch(opcion) {
-        case 1:
-            cazadorSELEC(cazadores, totalCazadores);  
-            break;
-        case 2:
-            añadirCazador(&cazadores, &totalCazadores);
-            break;
-        case 3:
-            printf("Saliendo...\n");
-            break;
-        default:
-            printf("Opción inválida.\n");
-            break;
-    }
- free (cazadores);
- }
 
  // Función para simular la batalla
 void comenzarBatalla(Cazador *cazador, Dragon *dragon) {
     printf(NARANJA "\n¡La batalla comienza entre %s (Cazador) y %s (Dragón)!\n" SC, cazador->nombre, dragon->nombre);
-    
+}
 
+int totalCazadores;
+
+Cazador* MENU(Cazador **cazadores, int *totalCazadores) {
+    int opcion;
+    Cazador *cazadorSeleccionado = NULL;
+
+    printf(MAGENTA"\t MENÚ: \n"
+           AZUL_C"\t 1) Seleccionar un cazador.\n"
+                 "\t 2) Añadir cazador.\n"
+                 "\t 3) Salir.\n"SC
+           MAGENTA"\t OPCIÓN: "SC);
+    scanf("%d", &opcion);
+    while (getchar() != '\n'); // Limpiar buffer
+
+    switch (opcion) {
+        case 1:
+            cazadorSeleccionado = cazadorSELEC(*cazadores, *totalCazadores); // Guardamos el cazador seleccionado
+            break;
+        case 2:
+            añadirCazador(cazadores, totalCazadores);
+            cazadorSeleccionado = &(*cazadores)[*totalCazadores - 1]; // El último cazador añadido
+            break;
+        case 3:
+            printf("Saliendo...\n");
+            return NULL; // Indicamos que no se seleccionó nada
+        default:
+            printf("Opción inválida.\n");
+            break;
+    }
+
+    return cazadorSeleccionado; // Devolvemos el cazador seleccionado
 }
 
 int main() {
@@ -556,24 +557,33 @@ int main() {
 
     BIENVENIDA();
     inicializarCazadores(&cazadores, &totalCazadores);
-    MENU();
 
-    printf(MAGENTA"\tMENÚ:\n");
+    // Paso 1: Seleccionar cazador
+    Cazador *cazadorSeleccionado = MENU(&cazadores, &totalCazadores);
+    if (cazadorSeleccionado == NULL) {
+        printf(ROJO"No se seleccionó un cazador. Saliendo...\n"SC);
+        free(dragones);
+        free(cazadores);
+        return 0;
+    }
+
+    // Paso 2: Seleccionar dragón
+    Dragon *dragonSeleccionado = NULL;
+    printf(MAGENTA"\tMENÚ DE DRAGONES:\n"SC);
     printf(AZUL_C"\t1) Seleccionar un dragón predefinido\n");
     printf(AZUL_C"\t2) Crear un nuevo dragón\n");
     printf(AZUL_C"\t3) Salir\n");
-    printf(MAGENTA"\tSeleccion: ");
+    printf(MAGENTA"\tSelección: "SC);
     scanf("%d", &opcion);
+    while (getchar() != '\n'); // Limpiar buffer
 
-    Dragon dragonSeleccionado;
-    switch(opcion) {
+    switch (opcion) {
         case 1:
-            visualizarDragones(&dragones, &totalDragones);
-            dragonSeleccionado = dragones[0]; // Selecciona el primero como ejemplo
+            dragonSeleccionado = visualizarDragones(&dragones, &totalDragones); // Solo esta línea
             break;
         case 2:
             añadir_dragon(&dragones, &totalDragones);
-            dragonSeleccionado = dragones[totalDragones - 1];
+            dragonSeleccionado = &dragones[totalDragones - 1]; // El último dragón añadido
             break;
         case 3:
             printf("Saliendo...\n");
@@ -585,7 +595,12 @@ int main() {
             break;
     }
 
-    comenzarBatalla(&cazadores[0], &dragonSeleccionado); // Usa el primer cazador
+    // Paso 3: Iniciar batalla con los seleccionados
+    if (cazadorSeleccionado != NULL && dragonSeleccionado != NULL) {
+        comenzarBatalla(cazadorSeleccionado, dragonSeleccionado);
+    } else {
+        printf(ROJO"Error: No se seleccionaron cazador y/o dragón correctamente.\n"SC);
+    }
 
     free(dragones);
     free(cazadores);
