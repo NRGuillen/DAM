@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "utilidades.h"
 
 #define MAX_NOMBRE 50
 #define MAX_DESCRIPCION 1000
@@ -40,6 +39,7 @@
 #define LAVANDA   "\033[38;2;230;230;250m"
 #define SALMON    "\033[38;2;250;128;114m"
 #define CHOCOLATE "\033[38;2;210;105;30m"
+#define CURSIVA "\033[3m"
 
 // Reset (para volver al color original)
 #define SC        "\033[0m"
@@ -48,7 +48,7 @@ typedef struct {
     int id;
     char nombre[MAX_NOMBRE];
     int vida;
-    int daño;
+    int ataque;
     int resistencia;
     char pasiva[MAX_DESCRIPCION];
     char descripcion[MAX_DESCRIPCION];
@@ -63,18 +63,19 @@ typedef struct{
     int ataque;
     int vida;
     int oro;
+    int defensa;
     char descripcion[MAXDESCRIPCION + 1];
 } Cazador;
 
+void comenzarBatalla(Cazador *cazador, Dragon *dragon);
 void inicializarCazador(Cazador *datos, int ID, const char *nombre, const char *arma, int ataque, int vida, int oro, const char *descripcion);
-void cazadorIMPRIMIR (const Cazador * cazador_a_imprimir);
-void inicializarCazadores(Cazador ** cazadores, int *totalCazadores);
+void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir);
+void inicializarCazadores(Cazador **cazadores, int *totalCazadores);
 void cazadorSELEC(Cazador *cazadores, int totalCazadores);
-
 void añadirCazador(Cazador **cazadores, int *totalCazadores);
-void inicializarDragon(Dragon *dragon, int id,  char *nombre, int vida, int daño, int resistencia,  char *pasiva,  char *descripcion, int oro);
+void inicializarDragon(Dragon *dragon, int id, char *nombre, int vida, int ataque, int resistencia, char *pasiva, char *descripcion, int oro);
 void mostrarDragon(Dragon *dragon);
-void visualizarDragones(void);
+void visualizarDragones(Dragon **dragones, int *totalDragones); // Actualizado
 void añadir_dragon(Dragon **dragones, int *totalDragones);
 void seleccionarDragon(Dragon *dragones, int totalDragones);
 
@@ -105,16 +106,16 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
 
     getchar(); 
 
-    // DAÑO
+    // ataque
     do {
-        printf(AZUL_C"\tDAÑO: ");
-        if (scanf("%d", &nuevoDragon.daño) != 1) {
+        printf(AZUL_C"\tataque: ");
+        if (scanf("%d", &nuevoDragon.ataque) != 1) {
             printf(ROJO"\tPor favor, introduce solo números.\n\n"SC);
             while (getchar() != '\n');  
-        } else if (nuevoDragon.daño < 0 || nuevoDragon.daño > 50) {
-            printf(ROJO"\tEl rango de daño tiene que estar entre 0-50\n\n"SC);
+        } else if (nuevoDragon.ataque < 0 || nuevoDragon.ataque > 50) {
+            printf(ROJO"\tEl rango de ataque tiene que estar entre 0-50\n\n"SC);
         }
-    } while (nuevoDragon.daño < 0 || nuevoDragon.daño > 50);
+    } while (nuevoDragon.ataque < 0 || nuevoDragon.ataque > 50);
 
     getchar(); 
 
@@ -124,7 +125,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
         if (scanf(" %d", &nuevoDragon.resistencia) != 1) {
             printf(ROJO"\tPor favor, introduce solo números.\n\n"SC);
             while (getchar() != '\n');  
-        } else if (nuevoDragon.daño < 0 || nuevoDragon.resistencia > 20) {
+        } else if (nuevoDragon.ataque < 0 || nuevoDragon.resistencia > 20) {
             printf(ROJO"\tEl rango de resistencia tiene que estar entre 0-20\n\n"SC);
         }
     } while (nuevoDragon.resistencia < 0 || nuevoDragon.resistencia > 20);
@@ -135,7 +136,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     // PASIVA
     printf(AZUL_C"\tPASIVA:\n");
     printf(ROJO"\t  1) +25%% resistencia a ataques\n");
-    printf(ROJO"\t  2) +25%% daño\n");
+    printf(ROJO"\t  2) +25%% ataque\n");
     printf(ROJO"\t  3) Se curará un 5%% de su vida después de cada ataque\n");
     printf(ROJO"\t  4) Sin pasiva\n");
     printf(MAGENTA"\tSelección: "SC);
@@ -147,7 +148,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
             strcpy(nuevoDragon.pasiva, SC"+25% resistencia a ataques");
             break;
         case 2:
-            strcpy(nuevoDragon.pasiva, SC"+25% daño");
+            strcpy(nuevoDragon.pasiva, SC"+25% ataque");
             break;
         case 3:
             strcpy(nuevoDragon.pasiva, SC"Se curará un 5% de su vida después de cada ataque");
@@ -175,11 +176,12 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
 
     nuevoDragon.id = (*totalDragones) + 1;
 
-    *dragones = (Dragon *)realloc(*dragones, (*totalDragones + 1) * sizeof(Dragon));
-    if (*dragones == NULL) {
-        printf(ROJO"\tError al asignar memoria\n\n");
-        return;
+    Dragon *temp = (Dragon *)realloc(*dragones, (*totalDragones + 1) * sizeof(Dragon));
+    if (temp == NULL) {
+     printf(ROJO"\tError al asignar memoria\n\n");
+      return;
     }
+    *dragones = temp;
 
     memcpy(&((*dragones)[*totalDragones]), &nuevoDragon, sizeof(Dragon));
 
@@ -190,7 +192,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
 }
 
 void inicializarCazadores(Cazador **cazadores, int *totalCazadores) {
-    *totalCazadores = 3; // Primero asignamos el número total de cazadores.
+    *totalCazadores = 3; // Número total de cazadores
 
     *cazadores = (Cazador *)malloc(*totalCazadores * sizeof(Cazador));
     if (*cazadores == NULL) {
@@ -198,16 +200,17 @@ void inicializarCazadores(Cazador **cazadores, int *totalCazadores) {
         exit(EXIT_FAILURE);
     }
 
+    // Inicializando los cazadores
     inicializarCazador(&(*cazadores)[0], 1, "Mushashi", "Iaido", 20, 120, 100, "Un caballero audaz y letal...");
     inicializarCazador(&(*cazadores)[1], 2, "Conan", "Atlantean", 15, 150, 100, "Un guerrero con fuerza colosal...");
     inicializarCazador(&(*cazadores)[2], 3, "Jeremias", "Yari", 10, 200, 100, "Un estratega con gran resistencia...");
 }
 
-void inicializarDragon(Dragon *dragon, int id,  char *nombre, int vida, int daño, int resistencia,  char *pasiva,  char *descripcion, int oro) {
+void inicializarDragon(Dragon *dragon, int id,  char *nombre, int vida, int ataque, int resistencia,  char *pasiva,  char *descripcion, int oro) {
     dragon->id = id;
     strcpy(dragon->nombre, nombre);
     dragon->vida = vida;
-    dragon->daño = daño;
+    dragon->ataque = ataque;
     dragon->resistencia = resistencia;
     strcpy(dragon->pasiva, pasiva);
     strcpy(dragon->descripcion, descripcion);
@@ -218,35 +221,31 @@ void mostrarDragon(Dragon *dragon) {
     printf(ROJO"\tID:"SC" %d\n", dragon->id);
     printf(ROJO"\tNombre:"SC" %s\n", dragon->nombre);
     printf(ROJO"\tVida:"SC" %d\n", dragon->vida);
-    printf(ROJO"\tDaño:"SC" %d\n", dragon->daño);
+    printf(ROJO"\tataque:"SC" %d\n", dragon->ataque);
     printf(ROJO"\tResistencia:"SC" %d%%\n", dragon->resistencia);
     printf(ROJO"\tPasiva:"SC" %s\n", dragon->pasiva);
     printf(ROJO"\tDescripción:"SC" %s\n", dragon->descripcion);
     printf(ROJO"\tRecompensa:"SC" %d de oro\n\n", dragon->oro);
 }
 
-void visualizarDragones() {
-    Dragon *dragones = (Dragon*) malloc(3 * sizeof(Dragon));
-    if(dragones == NULL){
+void visualizarDragones(Dragon **dragones, int *totalDragones) {
+    *totalDragones = 3;
+    *dragones = (Dragon*)malloc(3 * sizeof(Dragon));
+    if (*dragones == NULL) {
         printf("Error al reservar memoria\n");
-        exit(EXIT_SUCCESS);
+        exit(EXIT_FAILURE);
     }
 
-    inicializarDragon(&dragones[0], 1, "Nightmare", 100, 10, 15, "+25% resistencia a ataques", "Nightmare es un dragón proveniente de las pesadillas más oscuras, ningún caballero quiere desafiarle.", 50);
-    inicializarDragon(&dragones[1], 2, "Cryonyx", 100, 15, 15, "+25% daño", "Cryonyx es un dragón temido debido a su alto poder, vive en las montañas en solitario desarrollando aún más su fuerza.", 125);
-    inicializarDragon(&dragones[2], 3, "Velkhanos", 100, 10, 15, "Se curará un 5% de su vida después de cada ataque", "Velkhanos es un dragón histórico, proveniente de Asia, ningún otro dragón ha podido derrotarle.", 200);
+    inicializarDragon(&(*dragones)[0], 1, "Nightmare", 100, 10, 15, "+25% resistencia a ataques", "Nightmare es un dragón...", 50);
+    inicializarDragon(&(*dragones)[1], 2, "Cryonyx", 100, 15, 15, "+25% ataque", "Cryonyx es un dragón temido...", 125);
+    inicializarDragon(&(*dragones)[2], 3, "Velkhanos", 100, 10, 15, "Se curará un 5%...", "Velkhanos es un dragón histórico...", 200);
 
     printf(NARANJA"\nDRAGONES DISPONIBLES:\n"SC);
-    system("chafa -f symbols -s 50x30 Nightmare.jpg"); 
-    mostrarDragon(&dragones[0]);
-    system("chafa -f symbols -s 50x30 Cryonyx.jpg");
-    mostrarDragon(&dragones[1]);
-    system("chafa -f symbols -s 50x30 Velkhanos.jpg");
-    mostrarDragon(&dragones[2]);
+    for (int i = 0; i < *totalDragones; i++) {
+        mostrarDragon(&(*dragones)[i]);
+    }
 
-    seleccionarDragon(dragones, 3);
-
-    free(dragones);
+    seleccionarDragon(*dragones, *totalDragones);
 }
 
 void seleccionarDragon(Dragon *dragones, int totalDragones) {
@@ -290,16 +289,14 @@ void inicializarCazador(Cazador *datos, int ID, const char *nombre, const char *
     datos->ID = ID;
     strncpy(datos->nombre, nombre, sizeof(datos->nombre) - 1);
     datos->nombre[sizeof(datos->nombre) - 1] = '\0';
-
     strncpy(datos->arma, arma, sizeof(datos->arma) - 1);
     datos->arma[sizeof(datos->arma) - 1] = '\0';
-
     strncpy(datos->descripcion, descripcion, sizeof(datos->descripcion) - 1);
     datos->descripcion[sizeof(datos->descripcion) - 1] = '\0';
-
     datos->ataque = ataque;
     datos->vida = vida;
     datos->oro = oro;
+    datos->defensa = 0; // Valor por defecto
 }
 
 
@@ -417,7 +414,7 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
 
     // ATAQUE
     do {
-        printf(AZUL_C "\t DAÑO: " SC);
+        printf(AZUL_C "\t ataque: " SC);
 
         if (scanf("%d", &nuevoCazador.ataque) != 1) {
             printf(ROJO "Entrada inválida. Debe ingresar un número.\n" SC);
@@ -543,16 +540,22 @@ int totalCazadores;
  free (cazadores);
  }
 
+ // Función para simular la batalla
+void comenzarBatalla(Cazador *cazador, Dragon *dragon) {
+    printf(NARANJA "\n¡La batalla comienza entre %s (Cazador) y %s (Dragón)!\n" SC, cazador->nombre, dragon->nombre);
+    
+
+}
 
 int main() {
-    int opcion;
-    Dragon *dragones = NULL; 
+    Dragon *dragones = NULL;
     Cazador *cazadores = NULL;
-
     int totalDragones = 0;
-    int totalCazadores = 3;
-  
+    int totalCazadores = 0;
+    int opcion;
+
     BIENVENIDA();
+    inicializarCazadores(&cazadores, &totalCazadores);
     MENU();
 
     printf(MAGENTA"\tMENÚ:\n");
@@ -562,26 +565,31 @@ int main() {
     printf(MAGENTA"\tSeleccion: ");
     scanf("%d", &opcion);
 
+    Dragon dragonSeleccionado;
     switch(opcion) {
         case 1:
-            visualizarDragones();
+            visualizarDragones(&dragones, &totalDragones);
+            dragonSeleccionado = dragones[0]; // Selecciona el primero como ejemplo
             break;
-
         case 2:
             añadir_dragon(&dragones, &totalDragones);
+            dragonSeleccionado = dragones[totalDragones - 1];
             break;
-
         case 3:
             printf("Saliendo...\n");
-            break;
-
+            free(dragones);
+            free(cazadores);
+            return 0;
         default:
             printf("Opción inválida.\n");
             break;
     }
 
+    comenzarBatalla(&cazadores[0], &dragonSeleccionado); // Usa el primer cazador
+
     free(dragones);
     free(cazadores);
     return 0;
 }
+
 
