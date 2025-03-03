@@ -82,114 +82,112 @@ Cazador* MENU(Cazador **cazadores, int *totalCazadores);
 
 void añadir_dragon(Dragon **dragones, int *totalDragones) {
     Dragon nuevoDragon;
-    int seleccion;
 
     printf(AMARILLO"\nIntroduzca los datos del nuevo dragon: \n"SC);
 
-    printf(AZUL_C"\tID: %d\n", 1 + MAX_DRAGONES);
+    // ID based on current number of dragons
+    nuevoDragon.id = (*totalDragones) + 1;
+    printf(AZUL_C"\tID: %d\n"SC, nuevoDragon.id);
 
-    getchar();  
-
-    // NOMBRE
-    printf(AZUL_C"\tNOMBRE: ");
-    scanf("%[^\n]", nuevoDragon.nombre);
+    // NOMBRE (no initial buffer clear needed)
+    printf(AZUL_C"\tNOMBRE: "SC);
+    fgets(nuevoDragon.nombre, MAX_NOMBRE, stdin);
+    nuevoDragon.nombre[strcspn(nuevoDragon.nombre, "\n")] = 0;
 
     // VIDA
     do {
-        printf(AZUL_C"\tVIDA: ");
+        printf(AZUL_C"\tVIDA: "SC);
         if (scanf("%d", &nuevoDragon.vida) != 1) {
-            printf(ROJO"\tPor favor, introduce solo números.\n\n"SC);
-            while (getchar() != '\n');  
+            printf(ROJO"\tPor favor, introduce solo números.\n"SC);
+            while (getchar() != '\n');
         } else if (nuevoDragon.vida < 0 || nuevoDragon.vida > 100) {
-            printf(ROJO"\tEl rango de vida tiene que estar entre 0-100\n\n"SC);
+            printf(ROJO"\tEl rango de vida tiene que estar entre 0-100\n"SC);
+        } else {
+            break;
         }
-    } while (nuevoDragon.vida < 0 || nuevoDragon.vida > 100);
+    } while (1);
+    while (getchar() != '\n');
 
-    getchar(); 
-
-    // ataque
+    // ATAQUE
     do {
-        printf(AZUL_C"\tataque: ");
+        printf(AZUL_C"\tATAQUE: "SC);
         if (scanf("%d", &nuevoDragon.ataque) != 1) {
-            printf(ROJO"\tPor favor, introduce solo números.\n\n"SC);
-            while (getchar() != '\n');  
+            printf(ROJO"\tPor favor, introduce solo números.\n"SC);
+            while (getchar() != '\n');
         } else if (nuevoDragon.ataque < 0 || nuevoDragon.ataque > 50) {
-            printf(ROJO"\tEl rango de ataque tiene que estar entre 0-50\n\n"SC);
+            printf(ROJO"\tEl rango de ataque tiene que estar entre 0-50\n"SC);
+        } else {
+            break;
         }
-    } while (nuevoDragon.ataque < 0 || nuevoDragon.ataque > 50);
-
-    getchar(); 
+    } while (1);
+    while (getchar() != '\n');
 
     // RESISTENCIA
     do {
-        printf(AZUL_C"\tRESISTENCIA: ");
-        if (scanf(" %d", &nuevoDragon.resistencia) != 1) {
-            printf(ROJO"\tPor favor, introduce solo números.\n\n"SC);
-            while (getchar() != '\n');  
-        } else if (nuevoDragon.ataque < 0 || nuevoDragon.resistencia > 20) {
-            printf(ROJO"\tEl rango de resistencia tiene que estar entre 0-20\n\n"SC);
+        printf(AZUL_C"\tRESISTENCIA: "SC);
+        if (scanf("%d", &nuevoDragon.resistencia) != 1) {
+            printf(ROJO"\tPor favor, introduce solo números.\n"SC);
+            while (getchar() != '\n');
+        } else if (nuevoDragon.resistencia < 0 || nuevoDragon.resistencia > 20) {
+            printf(ROJO"\tEl rango de resistencia tiene que estar entre 0-20\n"SC);
+        } else {
+            break;
         }
-    } while (nuevoDragon.resistencia < 0 || nuevoDragon.resistencia > 20);
-
-    getchar(); 
-
+    } while (1);
+    while (getchar() != '\n');
 
     // PASIVA
-    printf(AZUL_C"\tPASIVA:\n");
-    printf(ROJO"\t  1) +25%% resistencia a ataques\n");
-    printf(ROJO"\t  2) +25%% ataque\n");
-    printf(ROJO"\t  3) Se curará un 5%% de su vida después de cada ataque\n");
-    printf(ROJO"\t  4) Sin pasiva\n");
+    int seleccion;
+    printf(AZUL_C"\tPASIVA:\n"SC);
+    printf(ROJO"\t  1) +25%% resistencia a ataques\n"SC);
+    printf(ROJO"\t  2) +25%% ataque\n"SC);
+    printf(ROJO"\t  3) Se curará un 5%% de su vida después de cada ataque\n"SC);
+    printf(ROJO"\t  4) Sin pasiva\n"SC);
     printf(MAGENTA"\tSelección: "SC);
     scanf("%d", &seleccion);
-    getchar(); 
+    while (getchar() != '\n');
 
     switch (seleccion) {
-        case 1:
-            strcpy(nuevoDragon.pasiva, SC"+25% resistencia a ataques");
-            break;
-        case 2:
-            strcpy(nuevoDragon.pasiva, SC"+25% ataque");
-            break;
-        case 3:
-            strcpy(nuevoDragon.pasiva, SC"Se curará un 5% de su vida después de cada ataque");
-            break;
-        default:
-            strcpy(nuevoDragon.pasiva, SC"Sin pasiva");
-            break;
+        case 1: strcpy(nuevoDragon.pasiva, "+25% resistencia a ataques"); break;
+        case 2: strcpy(nuevoDragon.pasiva, "+25% ataque"); break;
+        case 3: strcpy(nuevoDragon.pasiva, "Se curará un 5% de su vida después de cada ataque"); break;
+        default: strcpy(nuevoDragon.pasiva, "Sin pasiva"); break;
     }
 
     // DESCRIPCIÓN
-    printf(AZUL_C"\tDESCRIPCIÓN: ");
-    scanf("%[^\n]", nuevoDragon.descripcion);
-    getchar(); 
+    printf(AZUL_C"\tDESCRIPCIÓN: "SC);
+    fgets(nuevoDragon.descripcion, MAX_DESCRIPCION, stdin);
+    nuevoDragon.descripcion[strcspn(nuevoDragon.descripcion, "\n")] = 0;
 
-    // RECOMPENSA 
+    // RECOMPENSA
     do {
-        printf(AZUL_C"\tRECOMPENSA: ");
+        printf(AZUL_C"\tRECOMPENSA: "SC);
         if (scanf("%d", &nuevoDragon.oro) != 1) {
-            printf(ROJO"\tPor favor, introduce solo números.\n\n"SC);
-            while (getchar() != '\n');  
+            printf(ROJO"\tPor favor, introduce solo números.\n"SC);
+            while (getchar() != '\n');
         } else if (nuevoDragon.oro < 0 || nuevoDragon.oro > 200) {
-            printf(ROJO"\tEl rango de recompensa tiene que estar entre 0-200\n\n"SC);
+            printf(ROJO"\tEl rango de recompensa tiene que estar entre 0-200\n"SC);
+        } else {
+            break;
         }
-    } while (nuevoDragon.oro < 0 || nuevoDragon.oro > 200);
+    } while (1);
+    while (getchar() != '\n');
 
-    nuevoDragon.id = (*totalDragones) + 1;
-
-    Dragon *temp = (Dragon *)realloc(*dragones, (*totalDragones + 1) * sizeof(Dragon));
+    // Reallocate memory
+    Dragon *temp = realloc(*dragones, (*totalDragones + 1) * sizeof(Dragon));
     if (temp == NULL) {
-     printf(ROJO"\tError al asignar memoria\n\n");
-      return;
+        printf(ROJO"\tError al asignar memoria\n"SC);
+        free(*dragones);
+        return;
     }
     *dragones = temp;
 
-    memcpy(&((*dragones)[*totalDragones]), &nuevoDragon, sizeof(Dragon));
-
+    // Add new dragon
+    (*dragones)[*totalDragones] = nuevoDragon;
     (*totalDragones)++;
 
-    printf(NARANJA"\n\tDragón agregado:\n");
-    mostrarDragon(&nuevoDragon);
+    printf(NARANJA"\n\tDragón agregado:\n"SC);
+    mostrarDragon(&(*dragones)[*totalDragones - 1]);
 }
 
 void inicializarCazadores(Cazador **cazadores, int *totalCazadores) {
@@ -677,8 +675,8 @@ int main() {
 
     BIENVENIDA();
     inicializarCazadores(&cazadores, &totalCazadores);
+    visualizarDragones(&dragones, &totalDragones); // Sets totalDragones to 3
 
-    // Paso 1: Seleccionar cazador
     Cazador *cazadorSeleccionado = MENU(&cazadores, &totalCazadores);
     if (cazadorSeleccionado == NULL) {
         printf(ROJO"No se seleccionó un cazador. Saliendo...\n"SC);
@@ -687,25 +685,24 @@ int main() {
         return 0;
     }
 
-    // Paso 2: Seleccionar dragón o combatir todos
-    Dragon *dragonSeleccionado = NULL;
+    while (getchar() != '\n'); // Clear buffer after hunter selection
+
     printf(MAGENTA"\tMENÚ DE DRAGONES:\n"SC);
-    printf(AZUL_C"\t1) Combatir dragones predefinidos (elige en cada turno)\n");
-    printf(AZUL_C"\t2) Crear y combatir un nuevo dragón\n");
-    printf(AZUL_C"\t3) Salir\n");
+    printf(AZUL_C"\t1) Combatir dragones predefinidos (elige en cada turno)\n"SC);
+    printf(AZUL_C"\t2) Crear y combatir un nuevo dragón\n"SC);
+    printf(AZUL_C"\t3) Salir\n"SC);
     printf(MAGENTA"\tSelección: "SC);
     scanf("%d", &opcion);
-    while (getchar() != '\n');
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF); // Clear buffer after menu selection
 
     switch (opcion) {
         case 1:
-            dragonSeleccionado = visualizarDragones(&dragones, &totalDragones);
             comenzarBatalla(cazadorSeleccionado, dragones, totalDragones);
             break;
         case 2:
             añadir_dragon(&dragones, &totalDragones);
-            dragonSeleccionado = &dragones[totalDragones - 1];
-            comenzarBatalla(cazadorSeleccionado, dragonSeleccionado, 1);
+            comenzarBatalla(cazadorSeleccionado, &dragones[totalDragones - 1], 1);
             break;
         case 3:
             printf("Saliendo...\n");
@@ -721,5 +718,7 @@ int main() {
     free(cazadores);
     return 0;
 }
+
+
 
 
