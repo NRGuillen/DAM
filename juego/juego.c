@@ -15,7 +15,6 @@
 #define MAXDESCRIPCION 200
 #define MAXDESC 256  
 
-// Colores estándar ANSI
 #define NEGRO     "\033[30m"
 #define ROJO      "\033[31m"
 #define VERDE     "\033[32m"
@@ -25,7 +24,6 @@
 #define CIAN      "\033[36m"
 #define BLANCO    "\033[37m"
 
-// Colores personalizados RGB
 #define NARANJA   "\033[38;2;255;128;0m"
 #define ROSA      "\033[38;2;255;151;203m"
 #define AZUL_C    "\033[38;2;53;149;240m"
@@ -42,7 +40,6 @@
 #define CHOCOLATE "\033[38;2;210;105;30m"
 #define CURSIVA   "\033[3m"
 
-// Reset (para volver al color original)
 #define SC        "\033[0m"
 
 typedef struct {
@@ -85,16 +82,13 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
 
     printf(AMARILLO"\nIntroduzca los datos del nuevo dragon: \n"SC);
 
-    // ID based on current number of dragons
     nuevoDragon.id = (*totalDragones) + 1;
     printf(AZUL_C"\tID: %d\n"SC, nuevoDragon.id);
 
-    // NOMBRE (no initial buffer clear needed)
     printf(AZUL_C"\tNOMBRE: "SC);
     fgets(nuevoDragon.nombre, MAX_NOMBRE, stdin);
     nuevoDragon.nombre[strcspn(nuevoDragon.nombre, "\n")] = 0;
 
-    // VIDA
     do {
         printf(AZUL_C"\tVIDA: "SC);
         if (scanf("%d", &nuevoDragon.vida) != 1) {
@@ -108,7 +102,6 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     } while (1);
     while (getchar() != '\n');
 
-    // ATAQUE
     do {
         printf(AZUL_C"\tATAQUE: "SC);
         if (scanf("%d", &nuevoDragon.ataque) != 1) {
@@ -122,7 +115,6 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     } while (1);
     while (getchar() != '\n');
 
-    // RESISTENCIA
     do {
         printf(AZUL_C"\tRESISTENCIA: "SC);
         if (scanf("%d", &nuevoDragon.resistencia) != 1) {
@@ -136,7 +128,6 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     } while (1);
     while (getchar() != '\n');
 
-    // PASIVA
     int seleccion;
     printf(AZUL_C"\tPASIVA:\n"SC);
     printf(ROJO"\t  1) +25%% resistencia a ataques\n"SC);
@@ -154,26 +145,12 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
         default: strcpy(nuevoDragon.pasiva, "Sin pasiva"); break;
     }
 
-    // DESCRIPCIÓN
     printf(AZUL_C"\tDESCRIPCIÓN: "SC);
     fgets(nuevoDragon.descripcion, MAX_DESCRIPCION, stdin);
     nuevoDragon.descripcion[strcspn(nuevoDragon.descripcion, "\n")] = 0;
 
-    // RECOMPENSA
-    do {
-        printf(AZUL_C"\tRECOMPENSA: "SC);
-        if (scanf("%d", &nuevoDragon.oro) != 1) {
-            printf(ROJO"\tPor favor, introduce solo números.\n"SC);
-            while (getchar() != '\n');
-        } else if (nuevoDragon.oro < 0 || nuevoDragon.oro > 200) {
-            printf(ROJO"\tEl rango de recompensa tiene que estar entre 0-200\n"SC);
-        } else {
-            break;
-        }
-    } while (1);
-    while (getchar() != '\n');
+    nuevoDragon.oro = 100;
 
-    // Reallocate memory
     Dragon *temp = realloc(*dragones, (*totalDragones + 1) * sizeof(Dragon));
     if (temp == NULL) {
         printf(ROJO"\tError al asignar memoria\n"SC);
@@ -182,7 +159,6 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     }
     *dragones = temp;
 
-    // Add new dragon
     (*dragones)[*totalDragones] = nuevoDragon;
     (*totalDragones)++;
 
@@ -191,7 +167,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
 }
 
 void inicializarCazadores(Cazador **cazadores, int *totalCazadores) {
-    *totalCazadores = 3; // Número total de cazadores
+    *totalCazadores = 3;
 
     *cazadores = (Cazador *)malloc(*totalCazadores * sizeof(Cazador));
     if (*cazadores == NULL) {
@@ -199,13 +175,12 @@ void inicializarCazadores(Cazador **cazadores, int *totalCazadores) {
         exit(EXIT_FAILURE);
     }
 
-    // Inicializando los cazadores
     inicializarCazador(&(*cazadores)[0], 1, "Mushashi", "Iaido", 20, 120, 100, "Un caballero audaz y letal...");
     inicializarCazador(&(*cazadores)[1], 2, "Conan", "Atlantean", 15, 150, 100, "Un guerrero con fuerza colosal...");
     inicializarCazador(&(*cazadores)[2], 3, "Jeremias", "Yari", 10, 200, 100, "Un estratega con gran resistencia...");
 }
 
-void inicializarDragon(Dragon *dragon, int id,  char *nombre, int vida, int ataque, int resistencia,  char *pasiva,  char *descripcion, int oro) {
+void inicializarDragon(Dragon *dragon, int id, char *nombre, int vida, int ataque, int resistencia, char *pasiva, char *descripcion, int oro) {
     dragon->id = id;
     strcpy(dragon->nombre, nombre);
     dragon->vida = vida;
@@ -240,14 +215,14 @@ Dragon* visualizarDragones(Dragon **dragones, int *totalDragones) {
     inicializarDragon(&(*dragones)[2], 3, "Velkhanos", 100, 10, 15, "Se curará un 5%...", "Velkhanos es un dragón histórico...", 200);
 
     printf(NARANJA"\nDRAGONES DISPONIBLES:\n"SC);
-    system("chafa -f symbols -s 50x30 Nightmare.jpg"); 
+    system("chafa -f symbols -s 50x30 Nightmare.jpg");
     mostrarDragon(&(*dragones)[0]);
     system("chafa -f symbols -s 50x30 Cryonyx.jpg");
     mostrarDragon(&(*dragones)[1]);
     system("chafa -f symbols -s 50x30 Velkhanos.jpg");
     mostrarDragon(&(*dragones)[2]);
 
-    return *dragones; // Devolvemos el arreglo de dragones
+    return *dragones;
 }
 
 Dragon* seleccionarDragon(Dragon *dragones, int totalDragones) {
@@ -257,7 +232,7 @@ Dragon* seleccionarDragon(Dragon *dragones, int totalDragones) {
     do {
         printf(NARANJA"Introduzca el ID del dragón con el que va a jugar: "SC);
         scanf("%d", &seleccion);
-        while (getchar() != '\n'); // Limpiar buffer
+        while (getchar() != '\n');
 
         if (seleccion >= 1 && seleccion <= totalDragones) {
             switch (seleccion) {
@@ -276,16 +251,15 @@ Dragon* seleccionarDragon(Dragon *dragones, int totalDragones) {
             }
             mostrarDragon(&dragones[seleccion - 1]);
             valido = 1;
-            return &dragones[seleccion - 1]; // Devolvemos el dragón seleccionado
+            return &dragones[seleccion - 1];
         } else {
             printf(ROJO"Has introducido un dragón que no existe.\n\n"SC);
         }
     } while (!valido);
 
-    return NULL; // Nunca debería llegar aquí
+    return NULL;
 }
 
-// En cazadores.c o juego.c (solo en uno)
 void inicializarCazador(Cazador *datos, int ID, const char *nombre, const char *arma, int ataque, int vida, int oro, const char *descripcion) {
     datos->ID = ID;
     strncpy(datos->nombre, nombre, sizeof(datos->nombre) - 1);
@@ -297,22 +271,20 @@ void inicializarCazador(Cazador *datos, int ID, const char *nombre, const char *
     datos->ataque = ataque;
     datos->vida = vida;
     datos->oro = oro;
-    datos->defensa = 0; // Valor por defecto
+    datos->defensa = 0;
 }
 
-
-//VISUALIZAR CAZADOR
-void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir){
-    printf(NARANJA"\nID: %d\n", cazador_a_imprimir->ID);
-    printf("\nNombre: %s\n", cazador_a_imprimir->nombre);
-    printf("\nArma: %s\n", cazador_a_imprimir->arma);
-    printf("\nAtaque: %d\n", cazador_a_imprimir->ataque);
-    printf("\nVida: %d\n", cazador_a_imprimir->vida);
-    printf("\nOro: %d\n", cazador_a_imprimir->oro);
-    printf("\nDescripción: %s\n", cazador_a_imprimir->descripcion);
+void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir) {
+    printf(ROJO"\tID:"SC" %d\n", cazador_a_imprimir->ID);
+    printf(ROJO"\tNombre:"SC" %s\n", cazador_a_imprimir->nombre);
+    printf(ROJO"\tArma:"SC" %s\n", cazador_a_imprimir->arma);
+    printf(ROJO"\tAtaque:"SC" %d\n", cazador_a_imprimir->ataque);
+    printf(ROJO"\tVida:"SC" %d\n", cazador_a_imprimir->vida);
+    printf(ROJO"\tOro:"SC" %d\n", cazador_a_imprimir->oro);
+    printf(ROJO"\tDescripción:"SC" %s\n", cazador_a_imprimir->descripcion);
 }
 
- Cazador* cazadorSELEC(Cazador *cazadores, int totalCazadores) {
+Cazador* cazadorSELEC(Cazador *cazadores, int totalCazadores) {
     int intentos = 3;
     int cazadorACTIVO;
 
@@ -343,7 +315,7 @@ void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir){
                 system("chafa -f symbols -s 50x30 Sauron.jpg");
             }
             cazadorIMPRIMIR(&cazadores[cazadorACTIVO - 1]);
-            return &cazadores[cazadorACTIVO - 1]; // Devolvemos el cazador seleccionado
+            return &cazadores[cazadorACTIVO - 1];
         }
 
         if (intentos == 0) {
@@ -352,20 +324,17 @@ void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir){
         }
     } while (intentos > 0);
 
-    return NULL; // Nunca debería llegar aquí, pero por seguridad
+    return NULL;
 }
 
-//AÑADIR CAZADORES
 void añadirCazador(Cazador **cazadores, int *totalCazadores) {
     int intentos = 3;
     Cazador nuevoCazador;
     printf(AMARILLO "\nIntroduzca los datos del nuevo cazador: \n" SC);
 
-    // ID
     nuevoCazador.ID = *totalCazadores + 1;
     printf(AZUL_C "\t ID:" SC " %d.\n", nuevoCazador.ID);
 
-    // NOMBRE
     do {
         printf(AZUL_C "\t NOMBRE: " SC);
         scanf(" %[^\n]", nuevoCazador.nombre);
@@ -392,7 +361,6 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
         }
     } while (intentos > 0);
 
-    // ARMA
     do {
         printf(AZUL_C "\t ARMA: " SC);
         scanf(" %[^\n]", nuevoCazador.arma);
@@ -411,7 +379,6 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
         }
     } while (intentos > 0);
 
-    // ATAQUE
     do {
         printf(AZUL_C "\t ataque: " SC);
 
@@ -433,7 +400,6 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
         }
     } while (intentos > 0);
 
-    // VIDA
     do {
         printf(AZUL_C "\t VIDA: " SC);
 
@@ -455,11 +421,9 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
         }
     } while (intentos > 0);
 
-    // ORO (valor fijo)
     nuevoCazador.oro = 100;
     printf(AZUL_C "\t ORO:" SC " %d monedas.\n", nuevoCazador.oro);
 
-    // DESCRIPCIÓN
     do {
         printf(AZUL_C "\t DESCRIPCIÓN: " SC);
         scanf(" %[^\n]", nuevoCazador.descripcion);
@@ -483,18 +447,14 @@ void añadirCazador(Cazador **cazadores, int *totalCazadores) {
         printf("ERROR: No se pudo asignar memoria para el nuevo cazador.\n");
         exit(EXIT_FAILURE);
     }
-    *cazadores = REALLOC_TEMP;  // Solo si realloc fue exitoso
+    *cazadores = REALLOC_TEMP;
 
-
-    // **Añadir el nuevo cazador al array**
     (*cazadores)[*totalCazadores] = nuevoCazador;
     (*totalCazadores)++;
 
-    // **Imprimir cazador añadido**
     printf(NARANJA "\nCAZADOR AGREGADO:\n" SC);
     cazadorIMPRIMIR(&(*cazadores)[*totalCazadores - 1]);
 }
-
 
 void BIENVENIDA() {
     system("clear");
@@ -505,8 +465,6 @@ void BIENVENIDA() {
 
         "\nLos cazadores, sabiendo que esta vez el desafío es aún mayor, se preparan para enfrentar a una fuerza más peligrosa que cualquier que hayan conocido. No luchan solo por el oro, sino por evitar que la sombra de la codicia del dragón se apodere nuevamente de la tierra.\n\n"SC);
 }
-
-
 
 void comenzarBatalla(Cazador *cazador, Dragon *dragones, int totalDragones) {
     srand(time(NULL));
@@ -520,7 +478,6 @@ void comenzarBatalla(Cazador *cazador, Dragon *dragones, int totalDragones) {
     }
 
     while (vidaCazador > 0 && dragonesDerrotados < totalDragones) {
-        // Mostrar dragones disponibles
         printf(NARANJA "\nDRAGONES DISPONIBLES:\n" SC);
         int hayDragonesVivos = 0;
         for (int i = 0; i < totalDragones; i++) {
@@ -540,7 +497,6 @@ void comenzarBatalla(Cazador *cazador, Dragon *dragones, int totalDragones) {
             break;
         }
 
-        // Seleccionar dragón
         int seleccion;
         int valido = 0;
         do {
@@ -560,7 +516,6 @@ void comenzarBatalla(Cazador *cazador, Dragon *dragones, int totalDragones) {
 
         printf(NARANJA "\n¡La batalla comienza entre %s (Cazador) y %s (Dragón)!\n" SC, cazador->nombre, dragon->nombre);
 
-        // Combate contra el dragón seleccionado
         while (vidaCazador > 0 && vidaDragon > 0) {
             printf("\n" AZUL_C "Estado actual:\n" SC);
             printf("  %s (Cazador): Vida = %d\n", cazador->nombre, vidaCazador);
@@ -598,9 +553,7 @@ void comenzarBatalla(Cazador *cazador, Dragon *dragones, int totalDragones) {
             int ataqueDragon = rand() % 2;
             if (ataqueDragon == 1) {
                 int danoDragon = dragon->ataque;
-                // Aplicar +25% de daño extra por acertar el rand
                 danoDragon = (int)(danoDragon * 1.25);
-                // Si tiene la pasiva +25% ataque, se aplica adicionalmente
                 if (strcmp(dragon->pasiva, "+25% ataque") == 0) {
                     danoDragon = (int)(danoDragon * 1.25);
                 }
@@ -645,25 +598,25 @@ Cazador* MENU(Cazador **cazadores, int *totalCazadores) {
                  "\t 3) Salir.\n"SC
            MAGENTA"\t OPCIÓN: "SC);
     scanf("%d", &opcion);
-    while (getchar() != '\n'); // Limpiar buffer
+    while (getchar() != '\n');
 
     switch (opcion) {
         case 1:
-            cazadorSeleccionado = cazadorSELEC(*cazadores, *totalCazadores); // Guardamos el cazador seleccionado
+            cazadorSeleccionado = cazadorSELEC(*cazadores, *totalCazadores);
             break;
         case 2:
             añadirCazador(cazadores, totalCazadores);
-            cazadorSeleccionado = &(*cazadores)[*totalCazadores - 1]; // El último cazador añadido
+            cazadorSeleccionado = &(*cazadores)[*totalCazadores - 1];
             break;
         case 3:
             printf("Saliendo...\n");
-            return NULL; // Indicamos que no se seleccionó nada
+            return NULL;
         default:
             printf("Opción inválida.\n");
             break;
     }
 
-    return cazadorSeleccionado; // Devolvemos el cazador seleccionado
+    return cazadorSeleccionado;
 }
 
 int main() {
@@ -675,7 +628,7 @@ int main() {
 
     BIENVENIDA();
     inicializarCazadores(&cazadores, &totalCazadores);
-    visualizarDragones(&dragones, &totalDragones); // Sets totalDragones to 3
+    visualizarDragones(&dragones, &totalDragones);
 
     Cazador *cazadorSeleccionado = MENU(&cazadores, &totalCazadores);
     if (cazadorSeleccionado == NULL) {
@@ -685,7 +638,7 @@ int main() {
         return 0;
     }
 
-    while (getchar() != '\n'); // Clear buffer after hunter selection
+    while (getchar() != '\n');
 
     printf(MAGENTA"\tMENÚ DE DRAGONES:\n"SC);
     printf(AZUL_C"\t1) Combatir dragones predefinidos (elige en cada turno)\n"SC);
@@ -694,7 +647,7 @@ int main() {
     printf(MAGENTA"\tSelección: "SC);
     scanf("%d", &opcion);
     int c;
-    while ((c = getchar()) != '\n' && c != EOF); // Clear buffer after menu selection
+    while ((c = getchar()) != '\n' && c != EOF);
 
     switch (opcion) {
         case 1:
