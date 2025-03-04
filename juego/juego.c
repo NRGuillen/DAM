@@ -90,7 +90,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     nuevoDragon.nombre[strcspn(nuevoDragon.nombre, "\n")] = 0;
 
     do {
-        printf(AZUL_C"\tVIDA: "SC);
+        printf(VERDE_C"\tVIDA: "SC);
         if (scanf("%d", &nuevoDragon.vida) != 1) {
             printf(ROJO"\tPor favor, introduce solo números.\n"SC);
             while (getchar() != '\n');
@@ -103,7 +103,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     while (getchar() != '\n');
 
     do {
-        printf(AZUL_C"\tATAQUE: "SC);
+        printf(ROJO"\tATAQUE: "SC);
         if (scanf("%d", &nuevoDragon.ataque) != 1) {
             printf(ROJO"\tPor favor, introduce solo números.\n"SC);
             while (getchar() != '\n');
@@ -116,7 +116,7 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     while (getchar() != '\n');
 
     do {
-        printf(AZUL_C"\tRESISTENCIA: "SC);
+        printf(AZUL "\tRESISTENCIA: "SC);
         if (scanf("%d", &nuevoDragon.resistencia) != 1) {
             printf(ROJO"\tPor favor, introduce solo números.\n"SC);
             while (getchar() != '\n');
@@ -129,10 +129,10 @@ void añadir_dragon(Dragon **dragones, int *totalDragones) {
     while (getchar() != '\n');
 
     int seleccion;
-    printf(AZUL_C"\tPASIVA:\n"SC);
-    printf(ROJO"\t  1) +25%% resistencia a ataques\n"SC);
+    printf(AMARILLO"\tPASIVA:\n"SC);
+    printf(AZUL "\t  1) +25%% resistencia a ataques\n"SC);
     printf(ROJO"\t  2) +25%% ataque\n"SC);
-    printf(ROJO"\t  3) Se curará un 5%% de su vida después de cada ataque\n"SC);
+    printf(VERDE_C"\t  3) Se curará un 5%% de su vida después de cada ataque\n"SC);
     printf(ROJO"\t  4) Sin pasiva\n"SC);
     printf(MAGENTA"\tSelección: "SC);
     scanf("%d", &seleccion);
@@ -193,13 +193,13 @@ void inicializarDragon(Dragon *dragon, int id, char *nombre, int vida, int ataqu
 
 void mostrarDragon(Dragon *dragon) {
     printf(ROJO"\tID:"SC" %d\n", dragon->id);
-    printf(ROJO"\tNombre:"SC" %s\n", dragon->nombre);
-    printf(ROJO"\tVida:"SC" %d\n", dragon->vida);
-    printf(ROJO"\tataque:"SC" %d\n", dragon->ataque);
-    printf(ROJO"\tResistencia:"SC" %d%%\n", dragon->resistencia);
-    printf(ROJO"\tPasiva:"SC" %s\n", dragon->pasiva);
-    printf(ROJO"\tDescripción:"SC" %s\n", dragon->descripcion);
-    printf(ROJO"\tRecompensa:"SC" %d de oro\n\n", dragon->oro);
+    printf(LIMA"\tNombre:"SC" %s\n", dragon->nombre);
+    printf(VERDE_C"\tVida:"SC" %d\n", dragon->vida);
+    printf(ROJO"\tAtaque:"SC" %d\n", dragon->ataque);
+    printf(AZUL "\tResistencia:"SC" %d%%\n", dragon->resistencia);
+    printf(AMARILLO"\tPasiva:"SC" %s\n", dragon->pasiva);
+    printf(AZUL_C"\tDescripción:"SC" %s\n", dragon->descripcion);
+    printf(DORADO"\tRecompensa:"SC" %d de oro\n\n", dragon->oro);
 }
 
 void visualizarDragones(Dragon **dragones, int *totalDragones) {
@@ -272,12 +272,12 @@ void inicializarCazador(Cazador *datos, int ID, const char *nombre, const char *
 
 void cazadorIMPRIMIR(const Cazador *cazador_a_imprimir) {
     printf(ROJO"\tID:"SC" %d\n", cazador_a_imprimir->ID);
-    printf(ROJO"\tNombre:"SC" %s\n", cazador_a_imprimir->nombre);
+    printf(LIMA"\tNombre:"SC" %s\n", cazador_a_imprimir->nombre);
     printf(ROJO"\tArma:"SC" %s\n", cazador_a_imprimir->arma);
     printf(ROJO"\tAtaque:"SC" %d\n", cazador_a_imprimir->ataque);
-    printf(ROJO"\tVida:"SC" %d\n", cazador_a_imprimir->vida);
-    printf(ROJO"\tOro:"SC" %d\n", cazador_a_imprimir->oro);
-    printf(ROJO"\tDescripción:"SC" %s\n", cazador_a_imprimir->descripcion);
+    printf(VERDE_C "\tVida:"SC" %d\n", cazador_a_imprimir->vida);
+    printf(DORADO"\tOro:"SC" %d\n", cazador_a_imprimir->oro);
+    printf(AZUL_C"\tDescripción:"SC" %s\n", cazador_a_imprimir->descripcion);
 }
 
 void cazadorSELEC(Cazador *cazadores, int totalCazadores, Cazador **seleccionado) {
@@ -524,15 +524,15 @@ void comenzarBatalla(Cazador *cazador, Dragon *dragones, int totalDragones) {
             while (getchar() != '\n');
 
             if (opcion == 1) {
-                int danoCazador = cazador->ataque;
+                int dañoCazador = cazador->ataque;
                 int resistenciaDragon = dragon->resistencia;
                 if (strcmp(dragon->pasiva, "+25% resistencia a ataques") == 0) {
                     resistenciaDragon = (int)(resistenciaDragon * 1.25);
                 }
-                int danoReal = danoCazador - (danoCazador * resistenciaDragon / 100);
-                if (danoReal < 0) danoReal = 0;
-                vidaDragon -= danoReal;
-                printf(VERDE "%s ataca a %s y causa %d de daño!\n" SC, cazador->nombre, dragon->nombre, danoReal);
+                int dañoReal = dañoCazador - (dañoCazador * resistenciaDragon / 100);
+                if (dañoReal < 0) dañoReal = 0;
+                vidaDragon -= dañoReal;
+                printf(VERDE "%s ataca a %s y causa %d de daño!\n" SC, cazador->nombre, dragon->nombre, dañoReal);
             } else {
                 printf(ROJO "Opción inválida. Pierdes el turno.\n" SC);
             }
@@ -547,13 +547,13 @@ void comenzarBatalla(Cazador *cazador, Dragon *dragones, int totalDragones) {
 
             int ataqueDragon = rand() % 2;
             if (ataqueDragon == 1) {
-                int danoDragon = dragon->ataque;
-                danoDragon = (int)(danoDragon * 1.25);
+                int dañoDragon = dragon->ataque;
+                dañoDragon = (int)(dañoDragon * 1.25);
                 if (strcmp(dragon->pasiva, "+25% ataque") == 0) {
-                    danoDragon = (int)(danoDragon * 1.25);
+                    dañoDragon = (int)(dañoDragon * 1.25);
                 }
-                vidaCazador -= danoDragon;
-                printf(ROJO "%s ataca a %s y causa %d de daño! (25%% extra por acierto)\n" SC, dragon->nombre, cazador->nombre, danoDragon);
+                vidaCazador -= dañoDragon;
+                printf(ROJO "%s ataca a %s y causa %d de daño! (25%% extra por acierto)\n" SC, dragon->nombre, cazador->nombre, dañoDragon);
 
                 if (strcmp(dragon->pasiva, "Se curará un 5% de su vida después de cada ataque") == 0) {
                     int curacion = (int)(dragon->vida * 0.05);
